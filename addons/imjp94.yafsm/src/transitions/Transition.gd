@@ -11,7 +11,6 @@ export(String) var to # Name of state transiting to
 export(Array) var condition_groups
 export(int) var priority = 0 # Higher the number, higher the priority
 
-
 func _init(p_from="", p_to="", p_condition_groups=[]):
 	from = p_from
 	to = p_to
@@ -45,11 +44,6 @@ func equals(obj):
 		return false
 
 	return from == obj.from and to == obj.to
-
-# Get duplicate of conditions dictionary
-func get_conditions():
-	#return conditions.duplicate()
-	return {}
 
 static func sort(a, b):
 	if a.priority > b.priority:

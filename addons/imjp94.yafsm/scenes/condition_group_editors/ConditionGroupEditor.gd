@@ -41,7 +41,6 @@ func _exit_tree():
 	free_node_from_undo_redo() # Managed by EditorInspector
 
 func _on_condition_editor_added(editor):
-	editor.undo_redo = undo_redo
 	if not editor.is_connected("remove", self, "_on_ConditionEditor_remove"):
 		editor.connect("remove", self, "_on_ConditionEditor_remove", [editor])
 	if not editor.is_connected("change_name", self, "_on_ConditionEditor_change_name"):
@@ -82,6 +81,9 @@ func _on_add_popup_menu_index_pressed(index):
 	add_condition_editor_action(editor, condition)
 
 func _on_condition_group_changed():
+	if not condition_group:
+		return
+
 	for condition in condition_group.conditions.values():
 		var editor = create_condition_editor(condition)
 		add_condition_editor(editor, condition)
@@ -98,6 +100,8 @@ func create_condition_editor(condition):
 		editor = StringConditionEditor.instance()
 	else:
 		editor = ConditionEditor.instance()
+	
+	editor.undo_redo = undo_redo
 	
 	return editor
 

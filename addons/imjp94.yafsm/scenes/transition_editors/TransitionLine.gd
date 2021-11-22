@@ -2,6 +2,7 @@ tool
 extends "res://addons/imjp94.yafsm/scenes/flowchart/FlowChartLine.gd"
 const Transition = preload("../../src/transitions/Transition.gd")
 const ValueCondition = preload("../../src/conditions/ValueCondition.gd")
+const TransitionLineConditionGroup = preload("../../scenes/transition_editors/TransitionLineConditionGroup.tscn")
 
 export var upright_angle_range = 10.0
 
@@ -44,32 +45,47 @@ func _draw():
 
 # Update overlay text
 func update_label():
-	update()
-	return
-	
+	prints("update_label")
 	if transition:
-		var template_var = {"condition_name": "", "condition_comparation": "", "condition_value": null}
-		for label in vbox.get_children():
-			if not (label.name in transition.conditions.keys()):
-				vbox.remove_child(label)
-				label.queue_free()
-		for condition in transition.conditions.values():
-			var label = vbox.get_node_or_null(condition.name)
-			if not label:
-				label = Label.new()
-				label.align = label.ALIGN_CENTER
-				label.name = condition.name
-				vbox.add_child(label)
-			if "value" in condition:
-				template_var["condition_name"] = condition.name
-				template_var["condition_comparation"] = ValueCondition.COMPARATION_SYMBOLS[condition.comparation]
-				template_var["condition_value"] = condition.get_value_string()
-				label.text = template.format(template_var)
-				var override_template_var = _template_var.get(condition.name)
-				if override_template_var:
-					label.text = label.text.format(override_template_var)
-			else:
-				label.text = condition.name
+		#var template_var = {"condition_name": "", "condition_comparation": "", "condition_value": null}
+		#for label in vbox.get_children():
+		#	if not (label.name in transition.conditions.keys()):
+		#		vbox.remove_child(label)
+		#		label.queue_free()
+		#for condition_group in transition.conditions:
+		#	for condition in condition_group.conditions.values():
+		#		var label = vbox.get_node_or_null(condition.name)
+		#		if not label:
+		#			label = Label.new()
+		#			label.align = label.ALIGN_CENTER
+		#			label.name = condition.name
+		#			vbox.add_child(label)
+		#		if "value" in condition:
+		#			template_var["condition_name"] = condition.name
+		#			template_var["condition_comparation"] = ValueCondition.COMPARATION_SYMBOLS[condition.comparation]
+		#			template_var["condition_value"] = condition.get_value_string()
+		#			label.text = template.format(template_var)
+		#			var override_template_var = _template_var.get(condition.name)
+		#			if override_template_var:
+		#				label.text = label.text.format(override_template_var)
+		#		else:
+		#			label.text = condition.name
+	
+		for condition_group in transition.condition_groups:
+			var exists = false
+			for existing_condition_group_instance in vbox.get_children():
+				if existing_condition_group_instance.condition_group == condition_group:
+					exists = true
+					break
+			
+			if exists:
+				break
+			
+			var condition_group_instance = TransitionLineConditionGroup.instance()
+			condition_group_instance.condition_group = condition_group
+			prints("add child condition group to vbox")
+			vbox.add_child(condition_group_instance)
+		pass
 	update()
 
 func _on_transition_changed(new_transition):
@@ -77,22 +93,15 @@ func _on_transition_changed(new_transition):
 		return
 
 	if new_transition:
-		new_transition.connect("condition_added", self, "_on_transition_condition_added")
-		new_transition.connect("condition_removed", self, "_on_transition_condition_removed")
-		
-		#for condition in new_transition.conditions.values():
-		#	condition.connect("name_changed", self, "_on_condition_name_changed")
-		#	condition.connect("display_string_changed", self, "_on_condition_display_string_changed")
+		new_transition.connect("condition_group_added", self, "_on_Transition_condition_group_added")
+		new_transition.connect("condition_group_removed", self, "_on_Transition_condition_group_removed")
+
 	update_label()
 
-func _on_transition_condition_added(condition):
-	condition.connect("name_changed", self, "_on_condition_name_changed")
-	condition.connect("display_string_changed", self, "_on_condition_display_string_changed")
+func _on_Transition_condition_group_added(condition):
 	update_label()
 
-func _on_transition_condition_removed(condition):
-	condition.disconnect("name_changed", self, "_on_condition_name_changed")
-	condition.disconnect("display_string_changed", self, "_on_condition_display_string_changed")
+func _on_Transition_condition_group_removed(condition):
 	update_label()
 
 func _on_condition_name_changed(from, to):
@@ -107,7 +116,8 @@ func _on_condition_display_string_changed(display_string):
 func set_transition(t):
 	if transition != t:
 		if transition:
-			if transition.is_connected("condition_added", self, "_on_transition_condition_added"):
-				transition.disconnect("condition_added", self, "_on_transition_condition_added")
+			#if transition.is_connected("condition_added", self, "_on_transition_condition_added"):
+			#	transition.disconnect("condition_added", self, "_on_transition_condition_added")
+			pass
 		transition = t
 		_on_transition_changed(transition)
