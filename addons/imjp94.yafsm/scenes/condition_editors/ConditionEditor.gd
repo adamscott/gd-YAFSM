@@ -54,6 +54,7 @@ func _on_remove_pressed():
 	emit_signal("remove")
 
 func _on_change_name_callback(can_change, from, to):
+	prints("ConditionEditor.gd _on_change_name_callback can_change:", can_change)
 	if can_change:
 		if get_name().text != to: # Manually update name_edit.text, in case called from undo_redo
 			get_name().text = to
@@ -65,6 +66,8 @@ func change_name_edit(from, to):
 	emit_signal("change_name", from, to, funcref(self, "_on_change_name_callback"))
 
 func rename_edit_action(new_name_edit):
+	prints("ConditionEditor.gd rename_edit_action()", new_name_edit)
+	
 	var old_name_edit = condition.name
 	undo_redo.create_action("Rename_edit Condition")
 	undo_redo.add_do_method(self, "change_name_edit", old_name_edit, new_name_edit)
@@ -77,7 +80,7 @@ func _on_condition_changed(new_condition):
 		get_name().hint_tooltip = get_name().text
 
 func set_condition(c):
-	prints("set_condition", c)
+	prints("ConditionEditor.gd set_condition()", c, condition != c)
 	if condition != c:
 		condition = c
 		_on_condition_changed(c)

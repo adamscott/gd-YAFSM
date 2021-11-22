@@ -45,64 +45,30 @@ func _draw():
 
 # Update overlay text
 func update_label():
-	prints("update_label")
-	if transition:
-		#var template_var = {"condition_name": "", "condition_comparation": "", "condition_value": null}
-		#for label in vbox.get_children():
-		#	if not (label.name in transition.conditions.keys()):
-		#		vbox.remove_child(label)
-		#		label.queue_free()
-		#for condition_group in transition.conditions:
-		#	for condition in condition_group.conditions.values():
-		#		var label = vbox.get_node_or_null(condition.name)
-		#		if not label:
-		#			label = Label.new()
-		#			label.align = label.ALIGN_CENTER
-		#			label.name = condition.name
-		#			vbox.add_child(label)
-		#		if "value" in condition:
-		#			template_var["condition_name"] = condition.name
-		#			template_var["condition_comparation"] = ValueCondition.COMPARATION_SYMBOLS[condition.comparation]
-		#			template_var["condition_value"] = condition.get_value_string()
-		#			label.text = template.format(template_var)
-		#			var override_template_var = _template_var.get(condition.name)
-		#			if override_template_var:
-		#				label.text = label.text.format(override_template_var)
-		#		else:
-		#			label.text = condition.name
-	
-		for condition_group in transition.condition_groups:
-			var exists = false
-			for existing_condition_group_instance in vbox.get_children():
-				if existing_condition_group_instance.condition_group == condition_group:
-					exists = true
-					break
-			
-			if exists:
-				break
-			
-			var condition_group_instance = TransitionLineConditionGroup.instance()
-			condition_group_instance.condition_group = condition_group
-			prints("add child condition group to vbox")
-			vbox.add_child(condition_group_instance)
-		pass
+	prints("TransitionLine.gd update_label()")
 	update()
 
 func _on_transition_changed(new_transition):
+	prints("TransitionLine.gd _on_transition_changed()", new_transition)
+	
 	if not is_inside_tree():
 		return
 
 	if new_transition:
 		new_transition.connect("condition_group_added", self, "_on_Transition_condition_group_added")
 		new_transition.connect("condition_group_removed", self, "_on_Transition_condition_group_removed")
+		
+		if new_transition.condition_groups:
+			for condition_group in new_transition.condition_groups:
+				add_condition_group(condition_group)
 
-	update_label()
+func _on_Transition_condition_group_added(condition_group):
+	prints("TransitionLine.gd _on_Transition_condition_group_added", condition_group)
+	add_condition_group(condition_group)
 
-func _on_Transition_condition_group_added(condition):
-	update_label()
-
-func _on_Transition_condition_group_removed(condition):
-	update_label()
+func _on_Transition_condition_group_removed(condition_group):
+	prints("TransitionLine.gd _on_Transition_condition_group_removed", condition_group)
+	remove_condition_group(condition_group)
 
 func _on_condition_name_changed(from, to):
 	var label = vbox.get_node_or_null(from)
@@ -111,6 +77,20 @@ func _on_condition_name_changed(from, to):
 	update_label()
 
 func _on_condition_display_string_changed(display_string):
+	update_label()
+
+func add_condition_group(condition_group):
+	var condition_group_instance = TransitionLineConditionGroup.instance()
+	condition_group_instance.condition_group = condition_group
+	prints("add child condition group to vbox")
+	vbox.add_child(condition_group_instance)
+	update_label()
+
+func remove_condition_group(condition_group):
+	for existing_condition_group_instance in vbox.get_children():
+		if existing_condition_group_instance.condition_group == condition_group:
+			vbox.remove_child(existing_condition_group_instance)
+			break
 	update_label()
 
 func set_transition(t):

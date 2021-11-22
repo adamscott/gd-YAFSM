@@ -51,7 +51,7 @@ func _on_ConditionEditor_remove(editor):
 	remove_condition_editor_action(editor)
 
 func _on_ConditionEditor_change_name(from, to, callback, editor):
-	prints("change_name", from, to)
+	prints("_on_ConditionEditor_change_name", from, to)
 	var result = condition_group.change_condition_name(from, to)
 	callback.call_func(result, from, to)
 
@@ -81,6 +81,7 @@ func _on_add_popup_menu_index_pressed(index):
 	add_condition_editor_action(editor, condition)
 
 func _on_condition_group_changed():
+	prints("ConditionGroupEditor.gd _on_condition_group_changed", condition_group)
 	if not condition_group:
 		return
 
@@ -106,6 +107,7 @@ func create_condition_editor(condition):
 	return editor
 
 func add_condition_editor(editor, condition):
+	prints("ConditionGroupEditor.gd add_condition_editor", condition)
 	get_condition_list().add_child(editor)
 	editor.condition = condition # Must be assigned after enter tree, as assignment would trigger ui code
 	_on_condition_editor_added(editor)
@@ -131,6 +133,7 @@ func get_condition_list():
 	return $MarginContainer/VBoxContainer/Conditions
 
 func set_condition_group(val):
+	prints("ConditionGroupEditor.gd set_condition_group")
 	condition_group = val
 	_on_condition_group_changed()
 

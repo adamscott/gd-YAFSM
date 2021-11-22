@@ -13,7 +13,20 @@ func _ready() -> void:
 func _on_ConditionGroup_condition_added(condition):
 	prints("condition group condition added:", condition)
 	
+	add_condition(condition)
+
+func _on_ConditionGroup_condition_removed(condition):
+	prints("condition group condition removed:", condition)
 	
+	remove_condition(condition)
+
+func _on_Condition_name_changed(old, new):
+	update_labels()
+
+func _on_Condition_display_string_changed(new):
+	update_labels()
+
+func add_condition(condition):
 	var label = Label.new()
 	label.set_meta("condition", condition)
 	
@@ -24,19 +37,11 @@ func _on_ConditionGroup_condition_added(condition):
 	
 	$VBoxContainer.add_child(label)
 
-func _on_ConditionGroup_condition_removed(condition):
-	prints("condition group condition removed:", condition)
-	
+func remove_condition(condition):
 	var vbox_children = $VBoxContainer.get_children()
 	for label in vbox_children:
 		if label.get_meta("condition") == condition:
 			$VBoxContainer.remove_child(label)
-
-func _on_Condition_name_changed(old, new):
-	update_labels()
-
-func _on_Condition_display_string_changed(new):
-	update_labels()
 
 func set_condition_group(val):
 	if condition_group != null and condition_group != val:
@@ -49,14 +54,18 @@ func set_condition_group(val):
 	condition_group.connect("condition_added", self, "_on_ConditionGroup_condition_added")
 	condition_group.connect("condition_removed", self, "_on_ConditionGroup_condition_removed")
 	
+	for condition in condition_group.conditions.values():
+		add_condition(condition)
+	
 	update_labels()
 
 func update_labels():
+	prints("TransitionLineConditionGroup.gd update_labels()")
 	for label in $VBoxContainer.get_children():
 		update_label(label)
 
 func update_label(label):
-	prints("update_label", label)
+	prints("TransitionLineConditionGroup.gd update_label()", label)
 	var template_var = {"condition_name": "", "condition_comparation": "", "condition_value": null}
 	var condition = label.get_meta("condition")
 	

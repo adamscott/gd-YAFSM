@@ -62,6 +62,7 @@ func _on_add_pressed():
 	add_condition_group_editor_action(editor)
 
 func _on_transition_changed(new_transition):
+	prints("TransitionEditor.gd _on_transition_changed")
 	if not new_transition:
 		return
 	
@@ -73,6 +74,7 @@ func _on_transition_changed(new_transition):
 	update_priority_spinbox_value()
 
 func _on_condition_group_editor_added(editor):
+	prints("TransitionEditor.gd _on_condition_group_editor_added")
 	editor.undo_redo = undo_redo
 	
 	if not editor.is_connected("removed", self, "_on_ConditionGroupEditor_removed"):
@@ -85,6 +87,7 @@ func _on_ConditionGroupEditor_removed(editor) -> void:
 	remove_condition_group_editor_action(editor)
 
 func add_condition_group_editor(editor):
+	prints("TransitionEditor.gd add_condition_group_editor")
 	condition_group_list.add_child(editor)
 	_on_condition_group_editor_added(editor)
 
