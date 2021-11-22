@@ -27,5 +27,5 @@ margin_bottom = 24.0
 
 [node name="Remove" parent="." index="3"]
 margin_left = 98.0
-margin_right = 128.0
+margin_right = 126.0
 hint_tooltip = "Remove Condition"

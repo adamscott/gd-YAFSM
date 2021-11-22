@@ -39,6 +39,8 @@ func _init():
 	_to_free = []
 
 func _ready():
+	add.icon = get_icon("Add", "EditorIcons")
+	
 	header.connect("gui_input", self, "_on_header_gui_input")
 	priority_spinbox.connect("value_changed", self, "_on_priority_spinbox_value_changed")
 	add.connect("pressed", self, "_on_add_pressed")

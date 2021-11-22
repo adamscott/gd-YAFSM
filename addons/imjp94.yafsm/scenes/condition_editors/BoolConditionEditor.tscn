@@ -30,5 +30,5 @@ size_flags_horizontal = 6
 
 [node name="Remove" parent="." index="3"]
 margin_left = 174.0
-margin_right = 204.0
+margin_right = 202.0
 margin_bottom = 40.0

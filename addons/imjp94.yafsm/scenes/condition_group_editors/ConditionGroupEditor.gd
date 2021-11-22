@@ -29,8 +29,10 @@ func _init() -> void:
 	_to_free = []
 
 func _ready() -> void:
-	add_stylebox_override("panel", get_stylebox("Background", "EditorStyles"))
+	add.icon = get_icon("Add", "EditorIcons")
 	remove.icon = get_icon("GuiClose", "EditorIcons")
+	
+	add_stylebox_override("panel", get_stylebox("Background", "EditorStyles"))
 	remove.connect("pressed", self, "_on_remove_pressed")
 	add.connect("pressed", self, "_on_add_pressed")
 	add_popup_menu.connect("index_pressed", self, "_on_add_popup_menu_index_pressed")
@@ -50,6 +52,7 @@ func _on_ConditionEditor_remove(editor):
 	remove_condition_editor_action(editor)
 
 func _on_ConditionEditor_change_name(from, to, callback, editor):
+	prints("change_name", from, to)
 	var result = condition_group.change_condition_name(from, to)
 	callback.call_func(result, from, to)
 
