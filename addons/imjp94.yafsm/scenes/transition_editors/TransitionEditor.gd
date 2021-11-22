@@ -28,7 +28,7 @@ onready var add = $HeaderContainer/Header/HBoxContainer/Add
 onready var content_container = $MarginContainer
 onready var condition_group_list = $MarginContainer/ConditionGroups
 
-var undo_redo
+var undo_redo setget set_undo_redo
 
 var transition setget set_transition
 
@@ -75,7 +75,6 @@ func _on_transition_changed(new_transition):
 
 func _on_condition_group_editor_added(editor):
 	prints("TransitionEditor.gd _on_condition_group_editor_added")
-	editor.undo_redo = undo_redo
 	
 	if not editor.is_connected("removed", self, "_on_ConditionGroupEditor_removed"):
 		editor.connect("removed", self, "_on_ConditionGroupEditor_removed", [editor])
@@ -127,6 +126,8 @@ func toggle_conditions():
 func create_condition_group_editor(condition_group = null):
 	var editor = ConditionGroupEditor.instance()
 	editor.condition_group = condition_group
+	prints("TransitionEditor.gd create_condition_group_editor set undo_redo", undo_redo)
+	editor.undo_redo = undo_redo
 	return editor
 
 func add_condition_group_editor_action(editor):
@@ -146,6 +147,12 @@ func set_transition(t):
 	if transition != t:
 		transition = t
 		_on_transition_changed(t)
+
+func set_undo_redo(val):
+	undo_redo = val
+	
+	for editor in condition_group_list.get_children():
+		editor.undo_redo = val
 
 # Free nodes cached in UndoRedo stack
 func free_node_from_undo_redo():

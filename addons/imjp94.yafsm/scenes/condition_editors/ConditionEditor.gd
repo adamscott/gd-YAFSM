@@ -67,6 +67,7 @@ func change_name_edit(from, to):
 
 func rename_edit_action(new_name_edit):
 	prints("ConditionEditor.gd rename_edit_action()", new_name_edit)
+	prints("undo_redo", undo_redo)
 	
 	var old_name_edit = condition.name
 	undo_redo.create_action("Rename_edit Condition")

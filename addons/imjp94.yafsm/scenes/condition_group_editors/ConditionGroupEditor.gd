@@ -22,7 +22,7 @@ onready var add = $MarginContainer/VBoxContainer/AddConditionButton
 onready var add_popup_menu = $MarginContainer/VBoxContainer/AddConditionButton/PopupMenu
 
 var condition_group setget set_condition_group
-var undo_redo
+var undo_redo setget set_undo_redo
 var _to_free
 
 func _init() -> void:
@@ -102,6 +102,7 @@ func create_condition_editor(condition):
 	else:
 		editor = ConditionEditor.instance()
 	
+	prints("ConditionGroupEditor.gd create_condition_editor set editor undo_redo", undo_redo)
 	editor.undo_redo = undo_redo
 	
 	return editor
@@ -136,6 +137,12 @@ func set_condition_group(val):
 	prints("ConditionGroupEditor.gd set_condition_group")
 	condition_group = val
 	_on_condition_group_changed()
+
+func set_undo_redo(val):
+	undo_redo = val
+	
+	for editor in get_condition_list().get_children():
+		editor.undo_redo = val
 
 # Free nodes cached in UndoRedo stack
 func free_node_from_undo_redo():
