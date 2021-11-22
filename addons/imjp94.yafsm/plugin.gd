@@ -55,6 +55,13 @@ func _enter_tree():
 	add_inspector_plugin(state_inspector)
 
 func _exit_tree():
+	remove_custom_type("StackPlayer")
+	remove_custom_type("StateMachinePlayer")
+	remove_custom_type("StateMachine")
+
+	remove_inspector_plugin(transition_inspector)
+	remove_inspector_plugin(state_inspector)
+	
 	if state_machine_editor:
 		state_machine_editor.queue_free()
 

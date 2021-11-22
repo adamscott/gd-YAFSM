@@ -44,6 +44,9 @@ func _draw():
 
 # Update overlay text
 func update_label():
+	update()
+	return
+	
 	if transition:
 		var template_var = {"condition_name": "", "condition_comparation": "", "condition_value": null}
 		for label in vbox.get_children():
@@ -76,9 +79,10 @@ func _on_transition_changed(new_transition):
 	if new_transition:
 		new_transition.connect("condition_added", self, "_on_transition_condition_added")
 		new_transition.connect("condition_removed", self, "_on_transition_condition_removed")
-		for condition in new_transition.conditions.values():
-			condition.connect("name_changed", self, "_on_condition_name_changed")
-			condition.connect("display_string_changed", self, "_on_condition_display_string_changed")
+		
+		#for condition in new_transition.conditions.values():
+		#	condition.connect("name_changed", self, "_on_condition_name_changed")
+		#	condition.connect("display_string_changed", self, "_on_condition_display_string_changed")
 	update_label()
 
 func _on_transition_condition_added(condition):

@@ -152,33 +152,25 @@ hint_tooltip = "Add Condition"
 icon = ExtResource( 1 )
 flat = true
 
-[node name="PopupMenu" type="PopupMenu" parent="HeaderContainer/Header/HBoxContainer/Add"]
-margin_right = 20.0
-margin_bottom = 20.0
-items = [ "Trigger", null, 0, false, false, 0, 0, null, "", false, "Boolean", null, 0, false, false, 1, 0, null, "", false, "Integer", null, 0, false, false, 2, 0, null, "", false, "Float", null, 0, false, false, 3, 0, null, "", false, "String", null, 0, false, false, 4, 0, null, "", false ]
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="MarginContainer" type="MarginContainer" parent="."]
 margin_top = 36.0
 margin_right = 286.0
 margin_bottom = 44.0
 custom_constants/margin_right = 4
 custom_constants/margin_top = 4
-custom_constants/margin_left = 16
+custom_constants/margin_left = 4
 custom_constants/margin_bottom = 4
 
 [node name="Panel" type="Panel" parent="MarginContainer"]
-margin_left = 16.0
+margin_left = 4.0
 margin_top = 4.0
 margin_right = 282.0
 margin_bottom = 4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Conditions" type="VBoxContainer" parent="MarginContainer"]
-margin_left = 16.0
+[node name="ConditionGroups" type="VBoxContainer" parent="MarginContainer"]
+margin_left = 4.0
 margin_top = 4.0
 margin_right = 282.0
 margin_bottom = 4.0

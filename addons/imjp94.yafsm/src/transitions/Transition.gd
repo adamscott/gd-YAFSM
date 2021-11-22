@@ -1,76 +1,42 @@
 tool
 extends Resource
 
-signal condition_added(condition)
-signal condition_removed(condition)
+signal condition_group_added(condition_group)
+signal condition_group_removed(condition_group)
+
+const ConditionGroup = preload("../condition_groups/ConditionGroup.gd")
 
 export(String) var from # Name of state transiting from
 export(String) var to # Name of state transiting to
-export(Dictionary) var conditions setget ,get_conditions # Conditions to transit successfuly, keyed by Condition.name
+export(Array) var condition_groups
 export(int) var priority = 0 # Higher the number, higher the priority
 
 
-func _init(p_from="", p_to="", p_conditions={}):
+func _init(p_from="", p_to="", p_condition_groups=[]):
 	from = p_from
 	to = p_to
-	conditions = p_conditions
+	condition_groups = p_condition_groups
 
 # Attempt to transit with parameters given, return name of next state if succeeded else null
 func transit(params={}, local_params={}):
-	var can_transit = conditions.size() > 0
-	for condition in conditions.values():
-		var has_param = params.has(condition.name)
-		var has_local_param = local_params.has(condition.name)
-		if has_param or has_local_param:
-			# local_params > params
-			var value = local_params.get(condition.name) if has_local_param else params.get(condition.name)
-			if value == null: # null value is treated as trigger
-				can_transit = can_transit and true
-			else:
-				if "value" in condition:
-					can_transit = can_transit and condition.compare(value)
-		else:
-			can_transit = false
-	if can_transit or conditions.size() == 0:
-		return to
+	for condition_group in condition_groups:
+		var to = condition_group.transit(params, local_params)
+		
+		if to != null:
+			return to
+	
 	return null
 
-# Add condition, return true if succeeded
-func add_condition(condition):
-	if condition.name in conditions:
-		return false
+func add_condition_group():
+	var condition_group: = ConditionGroup.new()
+	condition_groups.append(condition_group)
+	emit_signal("condition_group_added", condition_group)
+	return condition_group
 
-	conditions[condition.name] = condition
-	emit_signal("condition_added", condition)
-	return true
-
-# Remove condition by name of condition
-func remove_condition(name):
-	var condition = conditions.get(name)
-	if condition:
-		conditions.erase(name)
-		emit_signal("condition_removed", condition)
-		return true
-	return false
-
-# Change condition name, return true if succeeded
-func change_condition_name(from, to):
-	if not (from in conditions) or to in conditions:
-		return false
-
-	var condition = conditions[from]
-	condition.name = to
-	conditions.erase(from)
-	conditions[to] = condition
-	return true
-
-func get_unique_name(name):
-	var new_name = name
-	var i = 1
-	while new_name in conditions:
-		new_name = name + str(i)
-		i += 1
-	return new_name
+func remove_condition_group(condition_group):
+	condition_groups.remove(condition_groups.find(condition_group))
+	emit_signal("condition_group_removed", condition_group)
+	return condition_group
 
 func equals(obj):
 	if obj == null:
@@ -82,7 +48,8 @@ func equals(obj):
 
 # Get duplicate of conditions dictionary
 func get_conditions():
-	return conditions.duplicate()
+	#return conditions.duplicate()
+	return {}
 
 static func sort(a, b):
 	if a.priority > b.priority:

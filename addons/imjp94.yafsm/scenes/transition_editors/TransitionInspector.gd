@@ -17,7 +17,7 @@ func parse_property(object, type, path, hint, hint_text, usage):
 			return true
 		"to":
 			return true
-		"conditions":
+		"condition_groups":
 			var transition_editor = TransitionEditor.instance() # Will be freed by editor
 			transition_editor.undo_redo = undo_redo
 			add_custom_control(transition_editor)
