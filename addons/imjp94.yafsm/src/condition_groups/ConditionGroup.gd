@@ -27,9 +27,8 @@ func transit(params={}, local_params={}):
 					can_transit = can_transit and condition.compare(value)
 		else:
 			can_transit = false
-	if can_transit or conditions.size() == 0:
-		return to
-	return null
+	
+	return can_transit or conditions.size() == 0
 
 # Add condition, return true if succeeded
 func add_condition(condition):

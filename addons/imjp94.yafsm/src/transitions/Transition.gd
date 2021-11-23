@@ -18,10 +18,12 @@ func _init(p_from="", p_to="", p_condition_groups=[]):
 
 # Attempt to transit with parameters given, return name of next state if succeeded else null
 func transit(params={}, local_params={}):
+	if condition_groups.size() == 0:
+		return to
+	
 	for condition_group in condition_groups:
-		var to = condition_group.transit(params, local_params)
-		
-		if to != null:
+		var result = condition_group.transit(params, local_params)
+		if result:
 			return to
 	
 	return null
