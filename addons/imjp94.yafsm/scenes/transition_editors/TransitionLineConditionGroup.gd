@@ -1,7 +1,7 @@
 tool
 extends PanelContainer
 
-const ValueCondition = preload("../condition_editors/ValueConditionEditor.gd")
+const ValueCondition = preload("../../src/conditions/ValueCondition.gd")
 
 var condition_group setget set_condition_group
 var template = "{condition_name} {condition_comparation} {condition_value}"
@@ -76,6 +76,13 @@ func update_label(label):
 		template_var["condition_name"] = condition.name
 		template_var["condition_comparation"] = ValueCondition.COMPARATION_SYMBOLS[condition.comparation]
 		template_var["condition_value"] = condition.get_value_string()
+		
+		prints(
+			"Condition name:", condition.name, 
+			"Condition comparation:", ValueCondition.COMPARATION_SYMBOLS[condition.comparation],
+			"Condition value:", condition.get_value_string()
+		)
+		
 		label.text = template.format(template_var)
 		var override_template_var = _template_var.get(condition.name)
 		if override_template_var:

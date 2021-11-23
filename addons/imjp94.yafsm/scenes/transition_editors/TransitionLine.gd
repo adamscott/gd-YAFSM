@@ -95,9 +95,5 @@ func remove_condition_group(condition_group):
 
 func set_transition(t):
 	if transition != t:
-		if transition:
-			#if transition.is_connected("condition_added", self, "_on_transition_condition_added"):
-			#	transition.disconnect("condition_added", self, "_on_transition_condition_added")
-			pass
 		transition = t
 		_on_transition_changed(transition)
