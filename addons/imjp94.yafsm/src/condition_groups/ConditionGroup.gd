@@ -36,12 +36,10 @@ func transit(params={}, local_params={}):
 
 # Add condition, return true if succeeded
 func add_condition(condition):
-	prints("add_condition", condition)
 	if condition.name in conditions:
 		return false
 
 	conditions[condition.name] = condition
-	prints("conditions:", conditions)
 	emit_signal("condition_added", condition)
 	return true
 
@@ -63,7 +61,6 @@ func get_unique_name(name):
 		new_name = name + str(i)
 		i += 1
 		
-	prints("unique_name:", name, conditions)
 	return new_name
 
 # Remove condition by name of condition

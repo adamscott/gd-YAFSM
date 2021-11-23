@@ -62,7 +62,6 @@ func _on_add_pressed():
 	add_condition_group_editor_action(editor)
 
 func _on_transition_changed(new_transition):
-	prints("TransitionEditor.gd _on_transition_changed")
 	if not new_transition:
 		return
 	
@@ -74,8 +73,6 @@ func _on_transition_changed(new_transition):
 	update_priority_spinbox_value()
 
 func _on_condition_group_editor_added(editor):
-	prints("TransitionEditor.gd _on_condition_group_editor_added")
-	
 	if not editor.is_connected("removed", self, "_on_ConditionGroupEditor_removed"):
 		editor.connect("removed", self, "_on_ConditionGroupEditor_removed", [editor])
 	
@@ -86,7 +83,6 @@ func _on_ConditionGroupEditor_removed(editor) -> void:
 	remove_condition_group_editor_action(editor)
 
 func add_condition_group_editor(editor):
-	prints("TransitionEditor.gd add_condition_group_editor")
 	condition_group_list.add_child(editor)
 	_on_condition_group_editor_added(editor)
 
@@ -126,12 +122,10 @@ func toggle_conditions():
 func create_condition_group_editor(condition_group = null):
 	var editor = ConditionGroupEditor.instance()
 	editor.condition_group = condition_group
-	prints("TransitionEditor.gd create_condition_group_editor set undo_redo", undo_redo)
 	editor.undo_redo = undo_redo
 	return editor
 
 func add_condition_group_editor_action(editor):
-	prints("add_condition_group_editor_action")
 	undo_redo.create_action("Add Transition Condition Group")
 	undo_redo.add_do_method(self, "add_condition_group_editor", editor)
 	undo_redo.add_undo_method(self, "remove_condition_group_editor", editor)
