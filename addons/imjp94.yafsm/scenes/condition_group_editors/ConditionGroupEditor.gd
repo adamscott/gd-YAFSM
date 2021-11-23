@@ -8,11 +8,13 @@ const BooleanCondition = preload("../../src/conditions/BooleanCondition.gd")
 const IntegerCondition = preload("../../src/conditions/IntegerCondition.gd")
 const FloatCondition = preload("../../src/conditions/FloatCondition.gd")
 const StringCondition = preload("../../src/conditions/StringCondition.gd")
+const ExpressionCondition = preload("../../src/conditions/ExpressionCondition.gd")
 const ConditionEditor = preload("../condition_editors/ConditionEditor.tscn")
 const BoolConditionEditor = preload("../condition_editors/BoolConditionEditor.tscn")
 const IntegerConditionEditor = preload("../condition_editors/IntegerConditionEditor.tscn")
 const FloatConditionEditor = preload("../condition_editors/FloatConditionEditor.tscn")
 const StringConditionEditor = preload("../condition_editors/StringConditionEditor.tscn")
+const ExpressionConditionEditor = preload("../condition_editors/ExpressionConditionEditor.tscn")
 
 signal removed
 
@@ -74,6 +76,8 @@ func _on_add_popup_menu_index_pressed(index):
 			condition = FloatCondition.new()
 		4: # String
 			condition = StringCondition.new()
+		5: # Expression
+			condition = ExpressionCondition.new()
 		_:
 			push_error("Unexpected index(%d) from PopupMenu" % index)
 	var editor = create_condition_editor(condition)
@@ -99,10 +103,11 @@ func create_condition_editor(condition):
 		editor = FloatConditionEditor.instance()
 	elif condition is StringCondition:
 		editor = StringConditionEditor.instance()
+	elif condition is ExpressionCondition:
+		editor = ExpressionConditionEditor.instance()
 	else:
 		editor = ConditionEditor.instance()
 	
-	prints("ConditionGroupEditor.gd create_condition_editor set editor undo_redo", undo_redo)
 	editor.undo_redo = undo_redo
 	
 	return editor

@@ -104,7 +104,7 @@ icon = SubResource( 5 )
 [node name="PopupMenu" type="PopupMenu" parent="MarginContainer/VBoxContainer/AddConditionButton"]
 margin_right = 20.0
 margin_bottom = 20.0
-items = [ "Trigger", null, 0, false, false, 0, 0, null, "", false, "Boolean", null, 0, false, false, 1, 0, null, "", false, "Integer", null, 0, false, false, 2, 0, null, "", false, "Float", null, 0, false, false, 3, 0, null, "", false, "String", null, 0, false, false, 4, 0, null, "", false ]
+items = [ "Trigger", null, 0, false, false, 0, 0, null, "", false, "Boolean", null, 0, false, false, 1, 0, null, "", false, "Integer", null, 0, false, false, 2, 0, null, "", false, "Float", null, 0, false, false, 3, 0, null, "", false, "String", null, 0, false, false, 4, 0, null, "", false, "Expression", null, 0, false, false, 5, 0, null, "", false ]
 __meta__ = {
 "_edit_use_anchors_": false
 }

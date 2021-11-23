@@ -1,6 +1,8 @@
 tool
 extends Resource
 
+const ExpressionCondition = preload("../../src/conditions/ExpressionCondition.gd")
+
 signal condition_added(condition)
 signal condition_removed(condition)
 
@@ -15,18 +17,20 @@ func _ready() -> void:
 func transit(params={}, local_params={}):
 	var can_transit = conditions.size() > 0
 	for condition in conditions.values():
-		var has_param = params.has(condition.name)
-		var has_local_param = local_params.has(condition.name)
-		if has_param or has_local_param:
-			# local_params > params
-			var value = local_params.get(condition.name) if has_local_param else params.get(condition.name)
-			if value == null: # null value is treated as trigger
-				can_transit = can_transit and true
-			else:
-				if "value" in condition:
-					can_transit = can_transit and condition.compare(value)
+		if condition is ExpressionCondition:
+			can_transit = can_transit and condition.execute(params, local_params)
 		else:
-			can_transit = false
+			var has_param = params.has(condition.name)
+			var has_local_param = local_params.has(condition.name)
+			if has_param or has_local_param:
+				# local_params > params
+				var value = local_params.get(condition.name) if has_local_param else params.get(condition.name)
+				if value == null: # null value is treated as trigger
+					can_transit = can_transit and true
+				elif "value" in condition:
+					can_transit = can_transit and condition.compare(value)
+			else:
+				can_transit = false
 	
 	return can_transit or conditions.size() == 0
 
