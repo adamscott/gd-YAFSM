@@ -7,6 +7,7 @@ signal condition_removed(condition)
 @export var from: String  # Name of state transiting from
 @export var to: String  # Name of state transiting to
 @export var conditions: Dictionary:  # Conditions to transit successfuly, keyed by Condition.name
+	set = set_conditions,
 	get = get_conditions
 @export var priority: = 0 # Higher the number, higher the priority
 
@@ -83,6 +84,9 @@ func equals(obj):
 		return false
 
 	return from == obj.from and to == obj.to
+
+func set_conditions(val):
+	_conditions = val
 
 # Get duplicate of conditions dictionary
 func get_conditions():
