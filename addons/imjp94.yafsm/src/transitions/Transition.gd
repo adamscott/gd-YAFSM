@@ -4,6 +4,8 @@ extends Resource
 signal condition_added(condition)
 signal condition_removed(condition)
 
+const ExpressionCondition = preload("../conditions/ExpressionCondition.gd")
+
 @export var from: String  # Name of state transiting from
 @export var to: String  # Name of state transiting to
 @export var conditions: Dictionary:  # Conditions to transit successfuly, keyed by Condition.name
@@ -26,7 +28,10 @@ func transit(params={}, local_params={}):
 	for condition in _conditions.values():
 		var has_param = params.has(condition.name)
 		var has_local_param = local_params.has(condition.name)
-		if has_param or has_local_param:
+		
+		if condition is ExpressionCondition:
+			can_transit = can_transit and condition.execute(params, local_params)
+		elif has_param or has_local_param:
 			# local_params > params
 			var value = local_params.get(condition.name) if has_local_param else params.get(condition.name)
 			if value == null: # null value is treated as trigger
