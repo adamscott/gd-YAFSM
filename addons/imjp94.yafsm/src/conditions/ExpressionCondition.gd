@@ -25,6 +25,7 @@ func execute(params = {}, local_params = {}):
 	if not expression.has_execute_failed():
 		return result
 	else:
+		push_error("Error executing %s" % name)
 		return false
 
 class TriggerInstance:
