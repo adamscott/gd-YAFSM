@@ -8,18 +8,16 @@ var content_nodes = Control.new() # Node that hold all flowchart nodes
 var _connections = {}
 
 func _init():
-	super._init()
-	
 	name = "FlowChartLayer"
-	mouse_filter = MOUSE_FILTER_IGNORE
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	content_lines.name = "content_lines"
-	content_lines.mouse_filter = MOUSE_FILTER_IGNORE
+	content_lines.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(content_lines)
 	move_child(content_lines, 0) # Make sure content_lines always behind nodes
 
 	content_nodes.name = "content_nodes"
-	content_nodes.mouse_filter = MOUSE_FILTER_IGNORE
+	content_nodes.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(content_nodes)
 
 func hide_content():
@@ -74,6 +72,7 @@ func rename_node(old, new):
 
 # Connect two nodes with a line
 func connect_node(line, from, to, interconnection_offset=0):
+	prints("connect_node", line, from, to)
 	if from == to:
 		return # Connect to self
 	var connections_from = _connections.get(from)

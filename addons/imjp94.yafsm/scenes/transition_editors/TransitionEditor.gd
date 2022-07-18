@@ -38,7 +38,6 @@ var _to_free
 
 
 func _init():
-	super._init()
 	_to_free = []
 
 func _ready():
@@ -182,4 +181,6 @@ func free_node_from_undo_redo():
 		if is_instance_valid(node):
 			node.queue_free()
 	_to_free.clear()
-	undo_redo.clear_history(false) # TODO: Should be handled by plugin.gd (Temporary solution as only TransitionEditor support undo/redo)
+	
+	if undo_redo:
+		undo_redo.clear_history(false) # TODO: Should be handled by plugin.gd (Temporary solution as only TransitionEditor support undo/redo)

@@ -27,7 +27,7 @@ signal dragged(node, distance) # When a node dragged
 	set = set_zoom
 
 var content = Control.new() # Root node that hold anything drawn in the flowchart
-var current_layer
+var current_layer: FlowChartLayer
 var h_scroll = HScrollBar.new()
 var v_scroll = VScrollBar.new()
 var top_bar = VBoxContainer.new()
@@ -59,22 +59,20 @@ var grid_minor_color = Color(1, 1, 1, 0.07)
 	
 
 func _init():
-	super._init()
-	
 	focus_mode = FOCUS_ALL
 	selection_stylebox.bg_color = Color(0, 0, 0, 0.3)
 	selection_stylebox.set_border_width_all(1)
 
-	content.mouse_filter = MOUSE_FILTER_IGNORE
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(content)
 
 	add_child(h_scroll)
-	h_scroll.set_anchors_and_offsets_preset(PRESET_BOTTOM_WIDE)
+	h_scroll.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	h_scroll.value_changed.connect(_on_h_scroll_changed)
 	h_scroll.gui_input.connect(_on_h_scroll_gui_input)
 
 	add_child(v_scroll)
-	v_scroll.set_anchors_and_offsets_preset(PRESET_RIGHT_WIDE)
+	v_scroll.set_anchors_and_offsets_preset(Control.PRESET_RIGHT_WIDE)
 	v_scroll.value_changed.connect(_on_v_scroll_changed)
 	v_scroll.gui_input.connect(_on_v_scroll_gui_input)
 
@@ -84,29 +82,29 @@ func _init():
 	add_layer_to(content)
 	select_layer_at(0)
 
-	top_bar.set_anchors_and_offsets_preset(PRESET_TOP_WIDE)
-	top_bar.mouse_filter = MOUSE_FILTER_IGNORE
+	top_bar.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
+	top_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(top_bar)
 
-	gadget.mouse_filter = MOUSE_FILTER_IGNORE
+	gadget.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	top_bar.add_child(gadget)
 
 	zoom_minus.flat = true
 	zoom_minus.hint_tooltip = "Zoom Out"
 	zoom_minus.pressed.connect(_on_zoom_minus_pressed)
-	zoom_minus.focus_mode = FOCUS_NONE
+	zoom_minus.focus_mode = Control.FOCUS_NONE
 	gadget.add_child(zoom_minus)
 
 	zoom_reset.flat = true
 	zoom_reset.hint_tooltip = "Zoom Reset"
 	zoom_reset.pressed.connect(_on_zoom_reset_pressed)
-	zoom_reset.focus_mode = FOCUS_NONE
+	zoom_reset.focus_mode = Control.FOCUS_NONE
 	gadget.add_child(zoom_reset)
 
 	zoom_plus.flat = true
 	zoom_plus.hint_tooltip = "Zoom In"
 	zoom_plus.pressed.connect(_on_zoom_plus_pressed)
-	zoom_plus.focus_mode = FOCUS_NONE
+	zoom_plus.focus_mode = Control.FOCUS_NONE
 	gadget.add_child(zoom_plus)
 
 	snap_button.flat = true
@@ -114,7 +112,7 @@ func _init():
 	snap_button.hint_tooltip = "Enable snap and show grid"
 	snap_button.pressed.connect(_on_snap_button_pressed)
 	snap_button.button_pressed = true
-	snap_button.focus_mode = FOCUS_NONE
+	snap_button.focus_mode = Control.FOCUS_NONE
 	gadget.add_child(snap_button)
 
 	snap_amount.value = snap
@@ -329,7 +327,7 @@ func _gui_input(event):
 									if from == selected.name or to == selected.name:
 										var connection = current_layer._connections[from][to]
 										connection.join()
-					_drag_end_pos = get_local_mouse_position()
+					_drag_end_pos = get_global_mouse_position()
 					update()
 
 	if event is InputEventMouseButton:
@@ -353,7 +351,8 @@ func _gui_input(event):
 				for i in current_layer.content_nodes.get_child_count():
 					var child = current_layer.content_nodes.get_child(current_layer.content_nodes.get_child_count()-1 - i) # Inverse order to check from top to bottom of canvas
 					if child is FlowChartNode:
-						if child.get_rect().has_point(content_position(event.position)):
+						var child_rect = Rect2(child.global_position, child.size)
+						if child_rect.has_point(event.global_position):
 							hit_node = child
 							break
 				if not hit_node:
@@ -368,8 +367,8 @@ func _gui_input(event):
 						var line_local_up_offset = connection.line.position - connection.line.get_transform() * (Vector2.DOWN * connection.offset)
 						var from_pos = connection.get_from_pos() + line_local_up_offset
 						var to_pos = connection.get_to_pos() + line_local_up_offset
-						var cp = Geometry2D.get_closest_point_to_segment(content_position(event.position), from_pos, to_pos)
-						var d = cp.distance_to(content_position(event.position))
+						var cp = Geometry2D.get_closest_point_to_segment(event.global_position, from_pos, to_pos)
+						var d = cp.distance_to(event.global_position)
 						if d > connection.line.size.y * 2:
 							continue
 						if d < closest_d:
@@ -420,8 +419,8 @@ func _gui_input(event):
 					if not _is_dragging:
 						# Drag start
 						_is_dragging = true
-						_drag_start_pos = event.position
-						_drag_end_pos = event.position
+						_drag_start_pos = event.global_position
+						_drag_end_pos = event.global_position
 				else:
 					var was_connecting = _is_connecting
 					var was_dragging_node = _is_dragging_node
@@ -429,6 +428,7 @@ func _gui_input(event):
 						# Connection end
 						var from = _current_connection.from_node.name
 						var to = hit_node.name if hit_node else null
+						
 						if hit_node is FlowChartNode and _request_connect_to(current_layer, to) and from != to:
 							# Connection success
 							var line

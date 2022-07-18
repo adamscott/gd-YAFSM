@@ -3,8 +3,8 @@ extends "Condition.gd"
 
 var expression = Expression.new()
 
-func _ready():
-	pass # Replace with function body.
+func _init() -> void:
+	super._init()
 
 func execute(params = {}, local_params = {}):
 	var execute_params = params.duplicate()

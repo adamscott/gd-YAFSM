@@ -7,10 +7,8 @@ var selected: = false:
 
 
 func _init():
-	super._init()
-	
-	focus_mode = FOCUS_CLICK
-	mouse_filter = MOUSE_FILTER_IGNORE
+	focus_mode = Control.FOCUS_CLICK
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func _draw():
 	pivot_at_line_start()
