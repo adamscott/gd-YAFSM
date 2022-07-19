@@ -72,7 +72,6 @@ func rename_node(old, new):
 
 # Connect two nodes with a line
 func connect_node(line, from, to, interconnection_offset=0):
-	prints("connect_node", line, from, to)
 	if from == to:
 		return # Connect to self
 	var connections_from = _connections.get(from)
@@ -149,8 +148,8 @@ class Connection:
 
 	# Return start position of line
 	func get_from_pos():
-		return from_node.position + from_node.size / 2
+		return from_node.global_position + from_node.size / 2
 
 	# Return destination position of line
 	func get_to_pos():
-		return to_node.position + to_node.size / 2 if to_node else line.position
+		return to_node.global_position + to_node.size / 2 if to_node else line.global_position
