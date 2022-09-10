@@ -45,7 +45,7 @@ func _on_name_edit_focus_exited():
 	rename_edit_action(name_edit.text)
 
 func _on_name_edit_text_changed():
-	name_edit.hint_tooltip = name_edit.text
+	name_edit.tooltip_text = name_edit.text
 
 func change_name_edit(from, to):
 	var transition = get_parent().get_parent().get_parent().transition # TODO: Better way to get Transition object
@@ -66,7 +66,7 @@ func rename_edit_action(new_name_edit):
 func _on_condition_changed(new_condition):
 	if new_condition:
 		name_edit.text = new_condition.name
-		name_edit.hint_tooltip = name_edit.text
+		name_edit.tooltip_text = name_edit.text
 
 func set_condition(c):
 	if condition != c:
