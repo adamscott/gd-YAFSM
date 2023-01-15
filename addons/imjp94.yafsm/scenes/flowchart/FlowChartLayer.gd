@@ -9,7 +9,7 @@ var _connections = {}
 
 func _init():
 	super._init()
-	
+
 	name = "FlowChartLayer"
 	mouse_filter = MOUSE_FILTER_IGNORE
 
@@ -124,7 +124,7 @@ func clear_connections():
 		for connection in connections_from.values():
 			connection.line.queue_free()
 	_connections.clear()
-			
+
 # Return array of dictionary of connection as such [{"from1": "to1"}, {"from2": "to2"}]
 func get_connection_list():
 	var connection_list = []

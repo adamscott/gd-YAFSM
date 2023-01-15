@@ -1,27 +1,24 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://dxtk6i1g1tx2q"]
 
-[ext_resource path="res://addons/imjp94.yafsm/src/debugger/StackPlayerDebugger.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/debugger/StackPlayerDebugger.gd" id="1"]
 
 [node name="StackPlayerDebugger" type="Control"]
-modulate = Color( 1, 1, 1, 0.498039 )
+modulate = Color(1, 1, 1, 0.498039)
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("1")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Stack" type="VBoxContainer" parent="MarginContainer"]
-margin_top = 600.0
-margin_bottom = 600.0
-mouse_filter = 2
+unique_name_in_owner = true
+layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
+mouse_filter = 2

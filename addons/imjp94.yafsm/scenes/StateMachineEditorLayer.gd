@@ -1,27 +1,27 @@
 @tool
 extends "res://addons/imjp94.yafsm/scenes/flowchart/FlowChartLayer.gd"
 
-const Utils = preload("res://addons/imjp94.yafsm/scripts/Utils.gd")
-const StateNode = preload("res://addons/imjp94.yafsm/scenes/state_nodes/StateNode.tscn")
-const StateNodeScript = preload("res://addons/imjp94.yafsm/scenes/state_nodes/StateNode.gd")
-const StateDirectory = preload("../src/StateDirectory.gd")
+const Utils: = preload("res://addons/imjp94.yafsm/scripts/Utils.gd")
+const StateNode: = preload("res://addons/imjp94.yafsm/scenes/state_nodes/StateNode.tscn")
+const StateNodeScript: = preload("res://addons/imjp94.yafsm/scenes/state_nodes/StateNode.gd")
+const StateDirectory: = preload("../src/StateDirectory.gd")
 
 var editor_accent_color: = Color.WHITE:
 	set = set_editor_accent_color
-var editor_complementary_color = Color.WHITE
+var editor_complementary_color: = Color.WHITE
 
-var state_machine
-var tween_lines
-var tween_labels
-var tween_nodes
+var state_machine: StateMachine
+var tween_lines: Tween
+var tween_labels: Tween
+var tween_nodes: Tween
 
 
-func debug_update(current_state, parameters, local_parameters):
+func debug_update(current_state, parameters, local_parameters) -> void:
 	_init_tweens()
 	if not state_machine:
 		return
-	var current_dir = StateDirectory.new(current_state)
-	var transitions = state_machine.transitions.get(current_state, {})
+	var current_dir: = StateDirectory.new(current_state)
+	var transitions: = state_machine.transitions.get(current_state, {})
 	if current_dir.is_nested():
 		transitions = state_machine.transitions.get(current_dir.get_end(), {})
 	for transition in transitions.values():
@@ -61,7 +61,7 @@ func debug_update(current_state, parameters, local_parameters):
 					tween_labels.tween_property(label, "self_modulate", Color.RED.lightened(0.5), 0.01)
 	_start_tweens()
 
-func debug_transit_out(from, to):
+func debug_transit_out(from, to) -> void:
 	_init_tweens()
 	var from_dir = StateDirectory.new(from)
 	var to_dir = StateDirectory.new(to)
@@ -111,7 +111,7 @@ func debug_transit_out(from, to):
 				tween_lines.tween_property(line, "self_modulate", Color.WHITE, 0.1)
 	_start_tweens()
 
-func debug_transit_in(from, to):
+func debug_transit_in(from, to) -> void:
 	_init_tweens()
 	var to_dir = StateDirectory.new(to)
 	var to_node = content_nodes.get_node_or_null(NodePath(to_dir.get_end()))
@@ -126,12 +126,12 @@ func debug_transit_in(from, to):
 		line.template = "{condition_name} {condition_comparation} {condition_value}({value})"
 	_start_tweens()
 
-func set_editor_accent_color(color):
+func set_editor_accent_color(color: Color) -> void:
 	editor_accent_color = color
 	editor_complementary_color = Utils.get_complementary_color(color)
 
 
-func _init_tweens():
+func _init_tweens() -> void:
 	tween_lines = get_tree().create_tween()
 	tween_lines.stop()
 	tween_labels = get_tree().create_tween()
@@ -140,7 +140,7 @@ func _init_tweens():
 	tween_nodes.stop()
 
 
-func _start_tweens():
+func _start_tweens() -> void:
 	tween_lines.tween_interval(0.001)
 	tween_lines.play()
 	tween_labels.tween_interval(0.001)

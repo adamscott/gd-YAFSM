@@ -13,21 +13,21 @@ signal transition_removed(to_state) # Transition removed
 	get = get_transitions,
 	set = set_transitions
 
-var _states
-var _transitions
+var _states: Dictionary
+var _transitions: Dictionary
 
 
-func _init(p_name="", p_transitions={}, p_states={}):
+func _init(p_name:="", p_transitions:={}, p_states:={}) -> void:
 	super._init(p_name)
 	_transitions = p_transitions
 	_states = p_states
 
 # Attempt to transit with global/local parameters, where local_params override params
-func transit(current_state, params={}, local_params={}):
-	var nested_states = current_state.split("/")
-	var is_nested = nested_states.size() > 1
-	var end_state_machine = self
-	var base_path = ""
+func transit(current_state: String, params:={}, local_params:={}) -> Variant:
+	var nested_states: = current_state.split("/")
+	var is_nested: = nested_states.size() > 1
+	var end_state_machine: = self
+	var base_path: = ""
 	for i in nested_states.size() - 1: # Ignore last one, to get its parent StateMachine
 		var state = nested_states[i]
 		# Construct absolute base path
@@ -45,20 +45,20 @@ func transit(current_state, params={}, local_params={}):
 			var end_state_machine_parent_path = ""
 			for i in nested_states.size() - 2: # Ignore last two state(which is end_state_machine/end_state)
 				end_state_machine_parent_path = join_path(end_state_machine_parent_path, [nested_states[i]])
-			var end_state_machine_parent = get_state(end_state_machine_parent_path)
+			var end_state_machine_parent: = get_state(end_state_machine_parent_path)
 			var normalized_current_state = end_state_machine.name
 			var next_state = end_state_machine_parent.transit(normalized_current_state, params)
 			if next_state:
 				# Construct next state into absolute path
 				next_state = join_path(end_state_machine_parent_path, [next_state])
 			return next_state
-	
+
 	# Transit with current running nested state machine
 	var from_transitions = end_state_machine.transitions.get(nested_states[nested_states.size()-1])
 	if from_transitions:
 		var from_transitions_array = from_transitions.values()
 		from_transitions_array.sort_custom(func(a, b): Transition.sort(a, b))
-		
+
 		for transition in from_transitions_array:
 			var next_state = transition.transit(params, local_params)
 			if next_state:
@@ -73,8 +73,8 @@ func transit(current_state, params={}, local_params={}):
 
 # Get state from absolute path, for exmaple, "path/to/state" (root == empty string)
 # *It is impossible to get parent state machine with path like "../sibling", as StateMachine is not structed as a Tree
-func get_state(path):
-	var state
+func get_state(path) -> StateMachine:
+	var state: StateMachine
 	if path.is_empty():
 		state = self
 	else:
@@ -88,7 +88,7 @@ func get_state(path):
 	return state
 
 # Add state, state name must be unique within this StateMachine, return state added if succeed else return null
-func add_state(state):
+func add_state(state: Variant) -> Variant:
 	if not state:
 		return null
 	if state.name in _states:
@@ -98,17 +98,17 @@ func add_state(state):
 	return state
 
 # Remove state by its name
-func remove_state(state):
+func remove_state(state) -> bool:
 	return _states.erase(state)
 
 # Change existing state key in states(Dictionary), return true if success
-func change_state_name(from, to):
+func change_state_name(from: String, to: String) -> bool:
 	if not (from in _states) or to in _states:
 		return false
 
 	for state_key in _states.keys():
-		var state = _states[state_key]
-		var is_name_changing_state = state_key == from
+		var state: = _states[state_key] as StateMachine
+		var is_name_changing_state: bool = state_key == from
 		if is_name_changing_state:
 			state.name = to
 			_states[to] = state
@@ -119,7 +119,7 @@ func change_state_name(from, to):
 				_transitions.erase(from)
 				_transitions[to] = from_transitions
 			for to_key in from_transitions.keys():
-				var transition = from_transitions[to_key]
+				var transition: = from_transitions[to_key] as Transition
 				if transition.from == from:
 					transition.from = to
 				elif transition.to == from:
@@ -131,7 +131,7 @@ func change_state_name(from, to):
 	return true
 
 # Add transition, Transition.from must be equal to this state's name and Transition.to not added yet
-func add_transition(transition):
+func add_transition(transition: Transition) -> void:
 	if transition.from == "" or transition.to == "":
 		push_warning("Transition missing from/to (%s/%s)" % [transition.from, transition.to])
 		return
@@ -147,42 +147,44 @@ func add_transition(transition):
 	emit_signal("transition_added", transition)
 
 # Remove transition with Transition.to(name of state transiting to)
-func remove_transition(from_state, to_state):
+func remove_transition(from_state: String, to_state: String) -> void:
 	var from_transitions = _transitions.get(from_state)
-	if from_transitions:
-		if to_state in from_transitions:
-			from_transitions.erase(to_state)
-			if from_transitions.is_empty():
-				_transitions.erase(from_state)
-			emit_signal("transition_removed", from_state, to_state)
+	if from_transitions == null:
+		return
+	var from_transitions_as_dict: = from_transitions as Dictionary
+	if to_state in from_transitions_as_dict:
+		from_transitions_as_dict.erase(to_state)
+		if from_transitions_as_dict.is_empty():
+			_transitions.erase(from_state)
+		emit_signal("transition_removed", from_state, to_state)
 
-func get_entries():
+func get_entries() -> Array[String]:
 	return _transitions[State.ENTRY_STATE].values()
-	
-func get_exits():
+
+func get_exits() -> Array[String]:
 	return _transitions[State.EXIT_STATE].values()
 
-func has_entry():
+func has_entry() -> bool:
 	return State.ENTRY_STATE in _states
 
-func has_exit():
+func has_exit() -> bool:
 	return State.EXIT_STATE in _states
 
 # Get duplicate of states dictionary
-func get_states():
+func get_states() -> Dictionary:
 	return _states.duplicate()
 
-func set_states(val):
+func set_states(val: Dictionary) -> void:
 	_states = val
 
 # Get duplicate of transitions dictionary
-func get_transitions():
+func get_transitions() -> Dictionary:
 	return _transitions.duplicate()
 
-func set_transitions(val):
+func set_transitions(val: Dictionary):
 	_transitions = val
 
-static func join_path(base, dirs):
+static func join_path(base: String, dirs: Array[String]) -> String:
 	var path = base
 	for dir in dirs:
 		if path.is_empty():
@@ -192,7 +194,7 @@ static func join_path(base, dirs):
 	return path
 
 # Validate state machine resource to identify and fix error
-static func validate(state_machine):
+static func validate(state_machine: StateMachine) -> bool:
 	var validated = false
 	for from_key in state_machine.transitions.keys():
 		# Non-existing state found in StateMachine.transitions
@@ -213,7 +215,7 @@ static func validate(state_machine):
 				from_transition.erase(to_key)
 				continue
 
-			# Mismatch of StateMachine.transitions with Transition.to 
+			# Mismatch of StateMachine.transitions with Transition.to
 			# See https://github.com/imjp94/gd-YAFSM/issues/6
 			var to_transition = from_transition[to_key]
 			if to_key != to_transition.to:

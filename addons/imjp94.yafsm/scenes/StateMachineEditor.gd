@@ -1,72 +1,72 @@
 @tool
 extends "res://addons/imjp94.yafsm/scenes/flowchart/FlowChart.gd"
-const StateMachinePlayer = preload("../src/StateMachinePlayer.gd")
-const StateMachine = preload("../src/states/StateMachine.gd")
-const Transition = preload("../src/transitions/Transition.gd")
-const State = preload("../src/states/State.gd")
-const StateDirectory = preload("../src/StateDirectory.gd")
-const StateNode = preload("state_nodes/StateNode.tscn")
-const TransitionLine = preload("transition_editors/TransitionLine.tscn")
-const StateNodeScript = preload("state_nodes/StateNode.gd")
-const StateMachineEditorLayer = preload("StateMachineEditorLayer.gd")
-const PathViewer = preload("PathViewer.gd")
+const StateMachinePlayer: = preload("../src/StateMachinePlayer.gd")
+const StateMachine: = preload("../src/states/StateMachine.gd")
+const Transition: = preload("../src/transitions/Transition.gd")
+const State: = preload("../src/states/State.gd")
+const StateDirectory: = preload("../src/StateDirectory.gd")
+const StateNode: = preload("state_nodes/StateNode.gd")
+const StateNodeScene: = preload("state_nodes/StateNode.tscn")
+const TransitionLine: = preload("transition_editors/TransitionLine.gd")
+const TransitionLineScene: = preload("transition_editors/TransitionLine.tscn")
+const StateMachineEditorLayer: = preload("StateMachineEditorLayer.gd")
+const PathViewer: = preload("PathViewer.gd")
 
 signal inspector_changed(property) # Inform plugin to refresh inspector
 signal debug_mode_changed(new_debug_mode)
 
-const ENTRY_STATE_MISSING_MSG = {
+const ENTRY_STATE_MISSING_MSG: = {
 	"key": "entry_state_missing",
 	"text": "Entry State missing, it will never get started. Right-click -> \"Add Entry\"."
 }
-const EXIT_STATE_MISSING_MSG = {
+const EXIT_STATE_MISSING_MSG: = {
 	"key": "exit_state_missing",
 	"text": "Exit State missing, it will never exit from nested state. Right-click -> \"Add Exit\"."
 }
-const DEBUG_MODE_MSG = {
+const DEBUG_MODE_MSG: = {
 	"key": "debug_mode",
 	"text": "Debug Mode"
 }
 
-@onready var context_menu = $ContextMenu
-@onready var state_node_context_menu = $StateNodeContextMenu
-@onready var convert_to_state_confirmation = $ConvertToStateConfirmation
-@onready var save_dialog = $SaveDialog
-@onready var create_new_state_machine_container = $MarginContainer
-@onready var create_new_state_machine = $MarginContainer/CreateNewStateMachine
-@onready var param_panel = $ParametersPanel
-var path_viewer = HBoxContainer.new()
-var condition_visibility = TextureButton.new()
-var unsaved_indicator = Label.new()
-var message_box = VBoxContainer.new()
+@onready var context_menu: = %ContextMenu
+@onready var state_node_context_menu: = %StateNodeContextMenu
+@onready var save_dialog: = %SaveDialog
+@onready var convert_to_state_confirmation: = %ConvertToStateConfirmation
+@onready var create_new_state_machine_container: = %CreateNewStateMachineContainer
+@onready var create_new_state_machine: = %CreateNewStateMachine
+@onready var param_panel: = %ParametersPanel
+var path_viewer: = PathViewer.new()
+var condition_visibility: = TextureButton.new()
+var unsaved_indicator: = Label.new()
+var message_box: = VBoxContainer.new()
 
-var editor_accent_color = Color.WHITE
+var editor_accent_color: = Color.WHITE
 var transition_arrow_icon
 
-var undo_redo
+var undo_redo: EditorUndoRedoManager
 
 var debug_mode: = false:
 	set = set_debug_mode
-var state_machine_player:
+var state_machine_player: StateMachinePlayer:
 	set = set_state_machine_player
-var state_machine:
+var state_machine: StateMachine:
 	set = set_state_machine
-var can_gui_name_edit = true
-var can_gui_context_menu = true
+var can_gui_name_edit: = true
+var can_gui_context_menu: = true
 
 var _reconnecting_connection
-var _last_index = 0
-var _last_path = ""
-var _message_box_dict = {}
+var _last_index: = 0
+var _last_path: = ""
+var _message_box_dict: = {}
 var _context_node
-var _current_state = ""
-var _last_stack = []
+var _current_state: = ""
+var _last_stack: = []
 
 
-func _init():
+func _init() -> void:
 	super._init()
-	
+
 	path_viewer.mouse_filter = MOUSE_FILTER_IGNORE
-	path_viewer.set_script(PathViewer)
 	path_viewer.dir_pressed.connect(_on_path_viewer_dir_pressed)
 	top_bar.add_child(path_viewer)
 
@@ -175,7 +175,7 @@ func _on_path_viewer_dir_pressed(dir, index):
 	_last_path = path
 
 func _on_context_menu_index_pressed(index):
-	var new_node = StateNode.instantiate()
+	var new_node: StateNode = StateNodeScene.instantiate()
 	new_node.theme.get_stylebox("focus", "FlowChartNode").border_color = editor_accent_color
 	match index:
 		0: # Add State
@@ -287,7 +287,7 @@ func _on_state_machine_changed(new_state_machine):
 
 func _gui_input(event):
 	super._gui_input(event)
-	
+
 	if event is InputEventMouseButton:
 		match event.button_index:
 			MOUSE_BUTTON_RIGHT:
@@ -408,14 +408,13 @@ func convert_to_state(layer, node):
 		new_state = node.state
 	return new_state
 
-func create_layer_instance():
-	var layer = Control.new()
-	layer.set_script(StateMachineEditorLayer)
+func create_layer_instance() -> StateMachineEditorLayer:
+	var layer: = StateMachineEditorLayer.new()
 	layer.editor_accent_color = editor_accent_color
 	return layer
 
-func create_line_instance():
-	var line = TransitionLine.instantiate()
+func create_line_instance() -> TransitionLine:
+	var line: TransitionLine = TransitionLineScene.instantiate()
 	line.theme.get_stylebox("focus", "FlowChartLine").shadow_color = editor_accent_color
 	line.theme.set_icon("arrow", "FlowChartLine", transition_arrow_icon)
 	return line
@@ -432,19 +431,19 @@ func save_request():
 func save():
 	if not can_save():
 		return
-	
+
 	unsaved_indicator.text = ""
 	ResourceSaver.save(state_machine, state_machine.resource_path)
 
 # Clear editor
 func clear_graph(layer):
 	clear_connections()
-	
+
 	for child in layer.content_nodes.get_children():
-		if child is StateNodeScript:
+		if child is StateNode:
 			layer.content_nodes.remove_child(child)
 			child.queue_free()
-	
+
 	queue_redraw()
 	unsaved_indicator.text = "" # Clear graph is not action by user
 
@@ -452,7 +451,7 @@ func clear_graph(layer):
 func draw_graph(layer):
 	for state_key in layer.state_machine.states.keys():
 		var state = layer.state_machine.states[state_key]
-		var new_node = StateNode.instantiate()
+		var new_node: StateNode = StateNodeScene.instantiate()
 		new_node.theme.get_stylebox("focus", "FlowChartNode").border_color = editor_accent_color
 		new_node.name = state_key # Set before add_node to let engine handle duplicate name
 		add_node(layer, new_node)
@@ -530,7 +529,7 @@ func _on_node_added(layer, new_node):
 	# Godot 4 duplicates node with an internal @ name, which breaks everything
 	while String(new_node.name).begins_with("@"):
 		new_node.name = String(new_node.name).lstrip("@")
-	
+
 	new_node.undo_redo = undo_redo
 	new_node.state.name = new_node.name
 	new_node.state.graph_offset = new_node.position

@@ -38,7 +38,7 @@ func _ready():
 	priority_spinbox.value_changed.connect(_on_priority_spinbox_value_changed)
 	add.pressed.connect(_on_add_pressed)
 	add_popup_menu.index_pressed.connect(_on_add_popup_menu_index_pressed)
-	
+
 	priority_icon.texture = get_theme_icon("AnimationTrackList", "EditorIcons")
 
 func _exit_tree():
@@ -120,7 +120,7 @@ func update_condition_count():
 func update_priority_spinbox_value():
 	priority_spinbox.value = transition.priority
 	priority_spinbox.apply()
-	
+
 func set_priority(value):
 	transition.priority = value
 

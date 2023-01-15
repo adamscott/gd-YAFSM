@@ -1,8 +1,8 @@
 # Position Popup near to its target while within window, solution from ColorPickerButton source code(https://github.com/godotengine/godot/blob/6d8c14f849376905e1577f9fc3f9512bcffb1e3c/scene/gui/color_picker.cpp#L878)
-static func popup_on_target(popup, target):
+static func popup_on_target(popup: Popup, target: Node2D) -> void:
 	popup.reset_size()
-	var usable_rect = Rect2(Vector2.ZERO, DisplayServer.window_get_real_size())
-	var cp_rect = Rect2(Vector2.ZERO, popup.get_size())
+	var usable_rect: = Rect2(Vector2.ZERO, DisplayServer.window_get_size_with_decorations())
+	var cp_rect: = Rect2(Vector2.ZERO, popup.get_size())
 	for i in 4:
 		if i > 1:
 			cp_rect.position.y = target.global_position.y - cp_rect.size.y
@@ -19,45 +19,45 @@ static func popup_on_target(popup, target):
 	popup.set_position(cp_rect.position)
 	popup.popup()
 
-static func get_complementary_color(color):
+static func get_complementary_color(color) -> Color:
 	var r = max(color.r, max(color.b, color.g)) + min(color.r, min(color.b, color.g)) - color.r
 	var g = max(color.r, max(color.b, color.g)) + min(color.r, min(color.b, color.g)) - color.g
 	var b = max(color.r, max(color.b, color.g)) + min(color.r, min(color.b, color.g)) - color.b
 	return Color(r, g, b)
 
 class CohenSutherland:
-	const INSIDE = 0 # 0000
-	const LEFT = 1 # 0001
-	const RIGHT = 2 # 0010
-	const BOTTOM = 4 # 0100
-	const TOP = 8 # 1000
+	const INSIDE: = 0b0000
+	const LEFT: = 0b0001
+	const RIGHT: = 0b0010
+	const BOTTOM: = 0b0100
+	const TOP: = 0b1000
 
 	# Compute bit code for a point(x, y) using the clip
-	static func compute_code(x, y, x_min, y_min, x_max, y_max):
-		var code = INSIDE # initialised as being inside of clip window
+	static func compute_code(x: float, y: float, x_min: float, y_min: float, x_max: float, y_max: float) -> int:
+		var code: = INSIDE # initialised as being inside of clip window
 		if x < x_min: # to the left of clip window
 			code |= LEFT
 		elif x > x_max: # to the right of clip window
 			code |= RIGHT
-		
+
 		if y < y_min: # below the clip window
 			code |= BOTTOM
 		elif y > y_max: # above the clip window
 			code |= TOP
-		
+
 		return code
 
 	# Cohen-Sutherland clipping algorithm clips a line from
 	# P0 = (x0, y0) to P1 = (x1, y1) against a rectangle with
 	# diagonal from start(x_min, y_min) to end(x_max, y_max)
-	static func line_intersect_rectangle(from, to, rect):
-		var x_min = rect.position.x
-		var y_min = rect.position.y
-		var x_max = rect.end.x
-		var y_max = rect.end.y
+	static func line_intersect_rectangle(from: Vector2, to: Vector2, rect: Rect2):
+		var x_min: = rect.position.x
+		var y_min: = rect.position.y
+		var x_max: = rect.end.x
+		var y_max: = rect.end.y
 
-		var code0 = compute_code(from.x, from.y, x_min, y_min, x_max, y_max)
-		var code1 = compute_code(to.x, to.y, x_min, y_min, x_max, y_max)
+		var code0: = compute_code(from.x, from.y, x_min, y_min, x_max, y_max)
+		var code1: = compute_code(to.x, to.y, x_min, y_min, x_max, y_max)
 
 		var i = 0
 		while true:
@@ -69,9 +69,9 @@ class CohenSutherland:
 			else:
 				# Failed both test, so calculate line segment to clip
 				# from outside point to intersection with clip edge
-				var x
-				var y
-				var code_out = max(code0, code1) # Pick the one outside window
+				var x: float
+				var y: float
+				var code_out: int = max(code0, code1) # Pick the one outside window
 
 				# Find intersection points
 				# slope = (y1 - y0) / (x1 - x0)

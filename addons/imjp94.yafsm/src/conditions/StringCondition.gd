@@ -8,10 +8,12 @@ class_name StringCondition
 
 
 func set_value(v):
-	if value != v:
-		value = v
-		emit_signal("value_changed", v)
-		emit_signal("display_string_changed", display_string())
+	assert(typeof(v) == TYPE_STRING)
+	if value == v:
+		return
+	value = v
+	emit_signal("value_changed", v)
+	emit_signal("display_string_changed", display_string())
 
 func get_value():
 	return value

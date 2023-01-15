@@ -6,10 +6,10 @@ extends MarginContainer
 @onready var button = $PanelContainer/MarginContainer/VBoxContainer/MarginContainer/Button
 
 
-func _ready():
+func _ready() -> void:
 	button.pressed.connect(_on_button_pressed)
 
-func update_params(params, local_params):
+func update_params(params, local_params) -> void:
 	# Remove erased parameters from param panel
 	for param in grid.get_children():
 		if not (param.name in params):
@@ -41,23 +41,23 @@ func set_param(param, value):
 
 	label.text = "%s = %s" % [param, value]
 
-func remove_param(param):
+func remove_param(param) -> void:
 	var label = grid.get_node_or_null(NodePath(param))
 	if label:
 		grid.remove_child(label)
 		label.queue_free()
 		set_anchors_preset(PRESET_BOTTOM_RIGHT)
 
-func clear_params():
+func clear_params() -> void:
 	for child in grid.get_children():
 		grid.remove_child(child)
 		child.queue_free()
 
-func _on_button_pressed():
+func _on_button_pressed() -> void:
 	grid.visible = !grid.visible
 	if grid.visible:
 		button.text = "Hide params"
 	else:
 		button.text = "Show params"
-	
+
 	set_anchors_preset(PRESET_BOTTOM_RIGHT)

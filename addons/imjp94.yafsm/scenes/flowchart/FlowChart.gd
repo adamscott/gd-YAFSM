@@ -1,14 +1,14 @@
 @tool
 extends Control
 
-const Utils = preload("res://addons/imjp94.yafsm/scripts/Utils.gd")
-const CohenSutherland = Utils.CohenSutherland
-const FlowChartNode = preload("FlowChartNode.gd")
-const FlowChartNodeScene = preload("FlowChartNode.tscn")
-const FlowChartLine = preload("FlowChartLine.gd")
-const FlowChartLineScene = preload("FlowChartLine.tscn")
-const FlowChartLayer = preload("FlowChartLayer.gd")
-const Connection = FlowChartLayer.Connection
+const Utils: = preload("res://addons/imjp94.yafsm/scripts/Utils.gd")
+const CohenSutherland: = Utils.CohenSutherland
+const FlowChartNode: = preload("FlowChartNode.gd")
+const FlowChartNodeScene: = preload("FlowChartNode.tscn")
+const FlowChartLine: = preload("FlowChartLine.gd")
+const FlowChartLineScene: = preload("FlowChartLine.tscn")
+const FlowChartLayer: = preload("FlowChartLayer.gd")
+const Connection: = FlowChartLayer.Connection
 
 signal connection(from, to, line) # When a connection established
 signal disconnection(from, to, line) # When a connection broken
@@ -17,7 +17,7 @@ signal node_deselected(node) # When a node deselected
 signal dragged(node, distance) # When a node dragged
 
 # Margin of content from edge of FlowChart
-@export var scroll_margin: = 100 
+@export var scroll_margin: = 100
 # Offset between two line that interconnecting
 @export var interconnection_offset: = 10
 # Snap amount
@@ -26,41 +26,41 @@ signal dragged(node, distance) # When a node dragged
 @export var zoom: = 1.0:
 	set = set_zoom
 
-var content = Control.new() # Root node that hold anything drawn in the flowchart
+var content: = Control.new() # Root node that hold anything drawn in the flowchart
 var current_layer
-var h_scroll = HScrollBar.new()
-var v_scroll = VScrollBar.new()
-var top_bar = VBoxContainer.new()
-var gadget = HBoxContainer.new() # Root node of top overlay controls
-var zoom_minus = Button.new()
-var zoom_reset = Button.new()
-var zoom_plus = Button.new()
-var snap_button = Button.new()
-var snap_amount = SpinBox.new()
+var h_scroll: = HScrollBar.new()
+var v_scroll: = VScrollBar.new()
+var top_bar: = VBoxContainer.new()
+var gadget: = HBoxContainer.new() # Root node of top overlay controls
+var zoom_minus: = Button.new()
+var zoom_reset: = Button.new()
+var zoom_plus: = Button.new()
+var snap_button: = Button.new()
+var snap_amount: = SpinBox.new()
 
-var is_snapping = true
-var can_gui_select_node = true
-var can_gui_delete_node = true
-var can_gui_connect_node = true
+var is_snapping: = true
+var can_gui_select_node: = true
+var can_gui_delete_node: = true
+var can_gui_connect_node: = true
 
-var _is_connecting = false
+var _is_connecting: = false
 var _current_connection
-var _is_dragging = false
-var _is_dragging_node = false
-var _drag_start_pos = Vector2.ZERO
-var _drag_end_pos = Vector2.ZERO
-var _drag_origins = []
-var _selection = []
-var _copying_nodes = []
+var _is_dragging: = false
+var _is_dragging_node: = false
+var _drag_start_pos: = Vector2.ZERO
+var _drag_end_pos: = Vector2.ZERO
+var _drag_origins: = []
+var _selection: = []
+var _copying_nodes: = []
 
-var selection_stylebox = StyleBoxFlat.new()
-var grid_major_color = Color(1, 1, 1, 0.15)
-var grid_minor_color = Color(1, 1, 1, 0.07)
-	
+var selection_stylebox: = StyleBoxFlat.new()
+var grid_major_color: = Color(1, 1, 1, 0.15)
+var grid_minor_color: = Color(1, 1, 1, 0.07)
 
-func _init():
+
+func _init() -> void:
 	super._init()
-	
+
 	focus_mode = FOCUS_ALL
 	selection_stylebox.bg_color = Color(0, 0, 0, 0.3)
 	selection_stylebox.set_border_width_all(1)
@@ -121,7 +121,7 @@ func _init():
 	snap_amount.value_changed.connect(_on_snap_amount_value_changed)
 	gadget.add_child(snap_amount)
 
-func _on_h_scroll_gui_input(event):
+func _on_h_scroll_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		var v = (h_scroll.max_value - h_scroll.min_value) * 0.01 # Scroll at 0.1% step
 		match event.button_index:
@@ -297,7 +297,7 @@ func _gui_input(event):
 						if _current_connection:
 							var pos = content_position(get_local_mouse_position())
 							var clip_rects = [_current_connection.from_node.get_rect()]
-							
+
 							# Snapping connecting line
 							for i in current_layer.content_nodes.get_child_count():
 								var child = current_layer.content_nodes.get_child(current_layer.content_nodes.get_child_count()-1 - i) # Inverse order to check from top to bottom of canvas
@@ -319,7 +319,7 @@ func _gui_input(event):
 							selected.modulate.a = 0.3
 							if is_snapping:
 								selected.position = selected.position.snapped(Vector2.ONE * snap)
-							selected.position -= selected.size / 2.0 
+							selected.position -= selected.size / 2.0
 							_on_node_dragged(current_layer, selected, dragged)
 							emit_signal("dragged", selected, dragged)
 							# Update connection pos
@@ -377,7 +377,7 @@ func _gui_input(event):
 							closest_d = d
 					if closest >= 0:
 						hit_node = current_layer._connections[connection_list[closest].from][connection_list[closest].to].line
-						
+
 				if event.pressed:
 					if not (hit_node in _selection) and not event.shift_pressed:
 						# Click on empty space

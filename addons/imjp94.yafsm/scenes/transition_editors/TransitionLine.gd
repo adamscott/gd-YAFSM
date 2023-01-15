@@ -18,7 +18,7 @@ var _template_var = {}
 
 func _init():
 	super._init()
-	
+
 	set_transition(Transition.new())
 
 func _draw():

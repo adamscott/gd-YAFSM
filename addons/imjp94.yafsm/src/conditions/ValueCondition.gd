@@ -27,30 +27,30 @@ const COMPARATION_SYMBOLS = [
 @export var comparation: Comparation = Comparation.EQUAL:
 	set = set_comparation
 
-func _init(p_name="", p_comparation=Comparation.EQUAL):
+func _init(p_name:="", p_comparation:=Comparation.EQUAL):
 	super._init(p_name)
 	comparation = p_comparation
 
-func set_comparation(c):
+func set_comparation(c: Comparation):
 	if comparation != c:
 		comparation = c
 		emit_signal("comparation_changed", c)
 		emit_signal("display_string_changed", display_string())
 
 # To be overrided by child class and emit value_changed signal
-func set_value(v):
+func set_value(v) -> void:
 	pass
 
 # To be overrided by child class, as it is impossible to export(Variant)
-func get_value():
-	pass
+func get_value() -> Variant:
+	return null
 
 # To be used in _to_string()
 func get_value_string():
 	return get_value()
 
 # Compare value against this condition, return true if succeeded
-func compare(v):
+func compare(v) -> bool:
 	if v == null:
 		return false
 
@@ -68,6 +68,8 @@ func compare(v):
 		Comparation.LESSER_OR_EQUAL:
 			return v <= get_value()
 
+	return false
+
 # Return human readable display string, for example, "condition_name == True"
-func display_string():
+func display_string() -> String:
 	return "%s %s %s" % [super.display_string(), COMPARATION_SYMBOLS[comparation], get_value_string()]

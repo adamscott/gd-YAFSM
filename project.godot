@@ -72,6 +72,10 @@ config/name="YAFSM"
 config/features=PackedStringArray("4.0")
 config/icon="res://icon.png"
 
+[editor]
+
+export/convert_text_resources_to_binary=true
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/imjp94.yafsm/plugin.cfg")
