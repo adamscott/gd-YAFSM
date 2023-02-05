@@ -5,7 +5,7 @@ extends "ValueConditionEditor.gd"
 
 func _ready():
 	super._ready()
-	
+
 	boolean_value.pressed.connect(_on_boolean_value_pressed)
 
 

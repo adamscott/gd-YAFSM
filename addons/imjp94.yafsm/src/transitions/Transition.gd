@@ -5,6 +5,8 @@ class_name Transition
 signal condition_added(condition)
 signal condition_removed(condition)
 
+const Condition = preload("../conditions/Condition.gd")
+
 @export var from: String  # Name of state transiting from
 @export var to: String  # Name of state transiting to
 @export var conditions: Dictionary:  # Conditions to transit successfuly, keyed by Condition.name

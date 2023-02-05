@@ -1,6 +1,5 @@
 @tool
-extends ValueCondition
-class_name FloatCondition
+extends "ValueCondition.gd"
 
 @export var value: float:
 	set = set_value,

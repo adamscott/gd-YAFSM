@@ -1,6 +1,5 @@
 @tool
-extends ValueCondition
-class_name BooleanCondition
+extends "ValueCondition.gd"
 
 @export var value: bool:
 	set = set_value,

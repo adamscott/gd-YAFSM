@@ -1,6 +1,5 @@
 @tool
-extends ValueCondition
-class_name StringCondition
+extends "ValueCondition.gd"
 
 @export var value: String:
 	set = set_value,

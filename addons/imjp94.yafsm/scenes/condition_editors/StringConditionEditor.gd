@@ -4,12 +4,12 @@ extends "res://addons/imjp94.yafsm/scenes/condition_editors/ValueConditionEditor
 
 @onready var string_value = $MarginContainer/StringValue
 
-var _old_value = 0
+var _old_value: = ""
 
 
 func _ready():
 	super._ready()
-	
+
 	string_value.text_submitted.connect(_on_string_value_text_submitted)
 	string_value.focus_entered.connect(_on_string_value_focus_entered)
 	string_value.focus_exited.connect(_on_string_value_focus_exited)
@@ -17,7 +17,7 @@ func _ready():
 
 func _input(event):
 	super._input(event)
-	
+
 	if event is InputEventMouseButton:
 		if event.pressed:
 			if get_viewport().gui_get_focus_owner() == string_value:

@@ -3,12 +3,12 @@ extends "ValueConditionEditor.gd"
 
 @onready var integer_value = $MarginContainer/IntegerValue
 
-var _old_value = 0
+var _old_value: = 0
 
 
 func _ready():
 	super._ready()
-	
+
 	integer_value.text_submitted.connect(_on_integer_value_text_submitted)
 	integer_value.focus_entered.connect(_on_integer_value_focus_entered)
 	integer_value.focus_exited.connect(_on_integer_value_focus_exited)
@@ -16,7 +16,7 @@ func _ready():
 
 func _input(event):
 	super._input(event)
-	
+
 	if event is InputEventMouseButton:
 		if event.pressed:
 			if get_viewport().gui_get_focus_owner() == integer_value:

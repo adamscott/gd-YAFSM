@@ -8,9 +8,6 @@ script = ExtResource("2")
 
 [node name="Comparation" type="Button" parent="." index="1"]
 layout_mode = 2
-offset_left = 71.0
-offset_right = 98.0
-offset_bottom = 31.0
 size_flags_horizontal = 5
 size_flags_vertical = 4
 text = "=="
@@ -32,11 +29,6 @@ item_5/id = 5
 
 [node name="MarginContainer" type="MarginContainer" parent="." index="2"]
 layout_mode = 2
-offset_left = 102.0
-offset_right = 102.0
-offset_bottom = 31.0
 
 [node name="Remove" parent="." index="3"]
-offset_left = 106.0
-offset_right = 132.0
 tooltip_text = "Remove Condition"
