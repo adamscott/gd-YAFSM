@@ -1,6 +1,51 @@
-[gd_scene load_steps=2 format=3 uid="uid://1gduutqpvvl0"]
+[gd_scene load_steps=12 format=3 uid="uid://1gduutqpvvl0"]
 
 [ext_resource type="Script" path="res://test.gd" id="1_rrnda"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/StateMachinePlayer.gd" id="2_hdb0f"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/StateMachine.gd" id="3_6tkxw"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/State.gd" id="4_3sm6r"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/conditions/ExpressionCondition.gd" id="5_2cf4u"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/transitions/Transition.gd" id="6_u1s1g"]
+
+[sub_resource type="Resource" id="Resource_y6u5c"]
+script = ExtResource("4_3sm6r")
+name = "Entry"
+metadata/graph_offset = Vector2(185, -58.5)
+
+[sub_resource type="Resource" id="Resource_odkrk"]
+script = ExtResource("4_3sm6r")
+name = "State"
+metadata/graph_offset = Vector2(565, -58.5)
+
+[sub_resource type="Resource" id="Resource_k3g5a"]
+script = ExtResource("5_2cf4u")
+name = "hello"
+
+[sub_resource type="Resource" id="Resource_nqo1c"]
+script = ExtResource("6_u1s1g")
+from = "Entry"
+to = "State"
+conditions = {
+"hello": SubResource("Resource_k3g5a")
+}
+priority = 0
+
+[sub_resource type="Resource" id="Resource_lkf3c"]
+script = ExtResource("3_6tkxw")
+states = {
+"Entry": SubResource("Resource_y6u5c"),
+"State": SubResource("Resource_odkrk")
+}
+transitions = {
+"Entry": {
+"State": SubResource("Resource_nqo1c")
+}
+}
+name = ""
 
 [node name="test" type="Node2D"]
 script = ExtResource("1_rrnda")
+
+[node name="StateMachinePlayer" type="Node" parent="."]
+script = ExtResource("2_hdb0f")
+state_machine = SubResource("Resource_lkf3c")
