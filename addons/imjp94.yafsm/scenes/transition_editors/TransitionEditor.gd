@@ -1,27 +1,34 @@
 @tool
 extends VBoxContainer
 const Utils = preload("../../scripts/Utils.gd")
+const Condition = preload("../../src/conditions/Condition.gd")
 const ConditionEditor = preload("../condition_editors/ConditionEditor.tscn")
+const BooleanCondition = preload("../../src/conditions/BooleanCondition.gd")
 const BoolConditionEditor = preload("../condition_editors/BoolConditionEditor.tscn")
+const IntegerCondition = preload("../../src/conditions/IntegerCondition.gd")
 const IntegerConditionEditor = preload("../condition_editors/IntegerConditionEditor.tscn")
+const FloatCondition = preload("../../src/conditions/FloatCondition.gd")
 const FloatConditionEditor = preload("../condition_editors/FloatConditionEditor.tscn")
+const StringCondition = preload("../../src/conditions/StringCondition.gd")
 const StringConditionEditor = preload("../condition_editors/StringConditionEditor.tscn")
+const ExpressionCondition = preload("../../src/conditions/ExpressionCondition.gd")
+const ExpressionConditionEditor = preload("../condition_editors/ExpressionConditionEditor.tscn")
 
-@onready var header = $HeaderContainer/Header
-@onready var title = $HeaderContainer/Header/Title
-@onready var title_icon = $HeaderContainer/Header/Title/Icon
-@onready var from = $HeaderContainer/Header/Title/From
-@onready var to = $HeaderContainer/Header/Title/To
-@onready var condition_count_icon = $HeaderContainer/Header/ConditionCount/Icon
-@onready var condition_count_label = $HeaderContainer/Header/ConditionCount/Label
-@onready var priority_icon = $HeaderContainer/Header/Priority/Icon
-@onready var priority_spinbox = $HeaderContainer/Header/Priority/SpinBox
-@onready var add = $HeaderContainer/Header/HBoxContainer/Add
-@onready var add_popup_menu = $HeaderContainer/Header/HBoxContainer/Add/PopupMenu
-@onready var content_container = $MarginContainer
-@onready var condition_list = $MarginContainer/Conditions
+@onready var header = %Header
+@onready var title = %Title
+@onready var title_icon = %TitleIcon
+@onready var from = %From
+@onready var to = %To
+@onready var condition_count_icon = %ConditionCountIcon
+@onready var condition_count_label = %ConditionCountLabel
+@onready var priority_icon = %PriorityIcon
+@onready var priority_spinbox = %PrioritySpinBox
+@onready var add = %Add
+@onready var add_popup_menu = %AddPopupMenu
+@onready var content_container = %ContentContainer
+@onready var condition_list = %ConditionList
 
-var undo_redo
+var undo_redo: EditorUndoRedoManager
 
 var transition:
 	set = set_transition
@@ -68,6 +75,8 @@ func _on_add_popup_menu_index_pressed(index):
 			condition = FloatCondition.new()
 		4: # String
 			condition = StringCondition.new()
+		5: # Expression
+			condition = ExpressionCondition.new()
 		_:
 			push_error("Unexpected index(%d) from PopupMenu" % index)
 	var editor = create_condition_editor(condition)
@@ -143,6 +152,8 @@ func create_condition_editor(condition):
 		editor = FloatConditionEditor.instantiate()
 	elif condition is StringCondition:
 		editor = StringConditionEditor.instantiate()
+	elif condition is ExpressionCondition:
+		editor = ExpressionConditionEditor.instantiate()
 	else:
 		editor = ConditionEditor.instantiate()
 	return editor

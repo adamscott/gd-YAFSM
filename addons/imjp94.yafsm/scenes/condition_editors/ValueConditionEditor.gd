@@ -9,7 +9,7 @@ const Comparation = preload("../../src/conditions/ValueCondition.gd").Comparatio
 
 func _ready():
 	super._ready()
-	
+
 	comparation_button.pressed.connect(_on_comparation_button_pressed)
 	comparation_popup_menu.id_pressed.connect(_on_comparation_popup_menu_id_pressed)
 
@@ -37,7 +37,7 @@ func change_comparation(id):
 func change_comparation_action(id):
 	var from = condition.comparation
 	var to = id
-	
+
 	undo_redo.create_action("Change Condition Comparation")
 	undo_redo.add_do_method(self, "change_comparation", to)
 	undo_redo.add_undo_method(self, "change_comparation", from)
