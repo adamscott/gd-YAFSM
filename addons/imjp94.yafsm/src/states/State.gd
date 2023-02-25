@@ -14,7 +14,7 @@ const META_GRAPH_OFFSET = "graph_offset" # Meta key for graph_offset
 	set = set_name
 
 var graph_offset:  # Position in FlowChart stored as meta, for editor only
-	set = set_graph_offset, 
+	set = set_graph_offset,
 	get = get_graph_offset
 
 

@@ -15,7 +15,7 @@ var state:
 
 func _init():
 	super._init()
-	
+
 	set_state(State.new("State"))
 
 func _ready():

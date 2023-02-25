@@ -59,5 +59,5 @@ func _on_button_pressed():
 		button.text = "Hide params"
 	else:
 		button.text = "Show params"
-	
+
 	set_anchors_preset(PRESET_BOTTOM_RIGHT)

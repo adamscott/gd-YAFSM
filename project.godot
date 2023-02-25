@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="YAFSM"
+run/main_scene="res://addons/imjp94.yafsm/scenes/StateMachineEditor.tscn"
 config/features=PackedStringArray("4.0")
 config/icon="res://icon.png"
 

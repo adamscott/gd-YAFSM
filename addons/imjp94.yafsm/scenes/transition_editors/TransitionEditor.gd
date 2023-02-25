@@ -3,6 +3,7 @@ extends VBoxContainer
 const Utils = preload("../../scripts/Utils.gd")
 const ConditionEditor = preload("../condition_editors/ConditionEditor.tscn")
 const BoolConditionEditor = preload("../condition_editors/BoolConditionEditor.tscn")
+const ExpressionConditionEditor = preload("../condition_editors/ExpressionConditionEditor.tscn")
 const IntegerConditionEditor = preload("../condition_editors/IntegerConditionEditor.tscn")
 const FloatConditionEditor = preload("../condition_editors/FloatConditionEditor.tscn")
 const StringConditionEditor = preload("../condition_editors/StringConditionEditor.tscn")
@@ -38,7 +39,7 @@ func _ready():
 	priority_spinbox.value_changed.connect(_on_priority_spinbox_value_changed)
 	add.pressed.connect(_on_add_pressed)
 	add_popup_menu.index_pressed.connect(_on_add_popup_menu_index_pressed)
-	
+
 	priority_icon.texture = get_theme_icon("AnimationTrackList", "EditorIcons")
 
 func _exit_tree():
@@ -68,6 +69,8 @@ func _on_add_popup_menu_index_pressed(index):
 			condition = FloatCondition.new()
 		4: # String
 			condition = StringCondition.new()
+		5: # Expression
+			condition = ExpressionCondition.new()
 		_:
 			push_error("Unexpected index(%d) from PopupMenu" % index)
 	var editor = create_condition_editor(condition)
@@ -120,7 +123,7 @@ func update_condition_count():
 func update_priority_spinbox_value():
 	priority_spinbox.value = transition.priority
 	priority_spinbox.apply()
-	
+
 func set_priority(value):
 	transition.priority = value
 
@@ -143,6 +146,8 @@ func create_condition_editor(condition):
 		editor = FloatConditionEditor.instantiate()
 	elif condition is StringCondition:
 		editor = StringConditionEditor.instantiate()
+	elif condition is ExpressionCondition:
+		editor = ExpressionConditionEditor.instantiate()
 	else:
 		editor = ConditionEditor.instantiate()
 	return editor

@@ -39,12 +39,12 @@ class CohenSutherland:
 			code |= LEFT
 		elif x > x_max: # to the right of clip window
 			code |= RIGHT
-		
+
 		if y < y_min: # below the clip window
 			code |= BOTTOM
 		elif y > y_max: # above the clip window
 			code |= TOP
-		
+
 		return code
 
 	# Cohen-Sutherland clipping algorithm clips a line from

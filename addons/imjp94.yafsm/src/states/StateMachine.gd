@@ -52,13 +52,13 @@ func transit(current_state, params={}, local_params={}):
 				# Construct next state into absolute path
 				next_state = join_path(end_state_machine_parent_path, [next_state])
 			return next_state
-	
+
 	# Transit with current running nested state machine
 	var from_transitions = end_state_machine.transitions.get(nested_states[nested_states.size()-1])
 	if from_transitions:
 		var from_transitions_array = from_transitions.values()
 		from_transitions_array.sort_custom(func(a, b): Transition.sort(a, b))
-		
+
 		for transition in from_transitions_array:
 			var next_state = transition.transit(params, local_params)
 			if next_state:
@@ -158,7 +158,7 @@ func remove_transition(from_state, to_state):
 
 func get_entries():
 	return _transitions[State.ENTRY_STATE].values()
-	
+
 func get_exits():
 	return _transitions[State.EXIT_STATE].values()
 
@@ -213,7 +213,7 @@ static func validate(state_machine):
 				from_transition.erase(to_key)
 				continue
 
-			# Mismatch of StateMachine.transitions with Transition.to 
+			# Mismatch of StateMachine.transitions with Transition.to
 			# See https://github.com/imjp94/gd-YAFSM/issues/6
 			var to_transition = from_transition[to_key]
 			if to_key != to_transition.to:

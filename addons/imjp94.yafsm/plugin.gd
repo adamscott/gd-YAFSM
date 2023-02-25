@@ -27,7 +27,7 @@ func _enter_tree():
 	var editor_base_control = get_editor_interface().get_base_control()
 	add_custom_type("StackPlayer", "Node", StackPlayer, StackPlayerIcon)
 	add_custom_type("StateMachinePlayer", "Node", StateMachinePlayer, StateMachinePlayerIcon)
-	
+
 	state_machine_editor.selection_stylebox.bg_color = editor_base_control.get_theme_color("box_selection_fill_color", "Editor")
 	state_machine_editor.selection_stylebox.border_color = editor_base_control.get_theme_color("box_selection_stroke_color", "Editor")
 	state_machine_editor.zoom_minus.icon = editor_base_control.get_theme_icon("ZoomLess", "EditorIcons")
@@ -92,7 +92,7 @@ func hide_state_machine_editor():
 func _on_EditorSelection_selection_changed():
 	if editor_selection == null:
 		return
-	
+
 	var selected_nodes = editor_selection.get_selected_nodes()
 	if selected_nodes.size() == 1:
 		var selected_node = selected_nodes[0]

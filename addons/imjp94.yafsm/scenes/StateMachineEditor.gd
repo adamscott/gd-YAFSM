@@ -64,7 +64,7 @@ var _last_stack = []
 
 func _init():
 	super._init()
-	
+
 	path_viewer.mouse_filter = MOUSE_FILTER_IGNORE
 	path_viewer.set_script(PathViewer)
 	path_viewer.dir_pressed.connect(_on_path_viewer_dir_pressed)
@@ -287,7 +287,7 @@ func _on_state_machine_changed(new_state_machine):
 
 func _gui_input(event):
 	super._gui_input(event)
-	
+
 	if event is InputEventMouseButton:
 		match event.button_index:
 			MOUSE_BUTTON_RIGHT:
@@ -432,19 +432,19 @@ func save_request():
 func save():
 	if not can_save():
 		return
-	
+
 	unsaved_indicator.text = ""
 	ResourceSaver.save(state_machine, state_machine.resource_path)
 
 # Clear editor
 func clear_graph(layer):
 	clear_connections()
-	
+
 	for child in layer.content_nodes.get_children():
 		if child is StateNodeScript:
 			layer.content_nodes.remove_child(child)
 			child.queue_free()
-	
+
 	queue_redraw()
 	unsaved_indicator.text = "" # Clear graph is not action by user
 
@@ -530,7 +530,7 @@ func _on_node_added(layer, new_node):
 	# Godot 4 duplicates node with an internal @ name, which breaks everything
 	while String(new_node.name).begins_with("@"):
 		new_node.name = String(new_node.name).lstrip("@")
-	
+
 	new_node.undo_redo = undo_redo
 	new_node.state.name = new_node.name
 	new_node.state.graph_offset = new_node.position
