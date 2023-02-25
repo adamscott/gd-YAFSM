@@ -3,6 +3,9 @@
 extends State
 class_name StateMachine
 
+const StateMachine = preload("./StateMachine.gd")
+const Transition = preload("../transitions/Transition.gd")
+
 signal transition_added(transition) # Transition added
 signal transition_removed(to_state) # Transition removed
 

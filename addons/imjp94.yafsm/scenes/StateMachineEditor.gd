@@ -1,9 +1,7 @@
 @tool
 extends "res://addons/imjp94.yafsm/scenes/flowchart/FlowChart.gd"
 const StateMachinePlayer: = preload("../src/StateMachinePlayer.gd")
-const StateMachine: = preload("../src/states/StateMachine.gd")
 const Transition: = preload("../src/transitions/Transition.gd")
-const State: = preload("../src/states/State.gd")
 const StateDirectory: = preload("../src/StateDirectory.gd")
 const StateNode: = preload("state_nodes/StateNode.gd")
 const StateNodeScene: = preload("state_nodes/StateNode.tscn")
@@ -223,7 +221,7 @@ func _on_save_dialog_confirmed():
 	save()
 
 func _on_create_new_state_machine_pressed():
-	var new_state_machine = StateMachine.new()
+	var new_state_machine: = StateMachine.new()
 	state_machine_player.state_machine = new_state_machine
 	set_state_machine(new_state_machine)
 	create_new_state_machine_container.visible = false

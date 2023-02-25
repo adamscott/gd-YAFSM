@@ -2,24 +2,24 @@
 
 [ext_resource type="Script" path="res://test.gd" id="1_rrnda"]
 [ext_resource type="Script" path="res://addons/imjp94.yafsm/src/StateMachinePlayer.gd" id="2_aik8m"]
-[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/StateMachine.gd" id="3_3qm1p"]
-[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/State.gd" id="4_scw53"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/StateMachine.gd" id="3_jggji"]
+[ext_resource type="Script" path="res://addons/imjp94.yafsm/src/states/State.gd" id="4_tce5m"]
 
-[sub_resource type="Resource" id="Resource_unpqd"]
-script = ExtResource("4_scw53")
+[sub_resource type="Resource" id="Resource_yb4bf"]
+script = ExtResource("4_tce5m")
 name = "Entry"
-metadata/graph_offset = Vector2(308, -18.6)
+metadata/graph_offset = Vector2(165, -38.5)
 
-[sub_resource type="Resource" id="Resource_r2u7v"]
-script = ExtResource("4_scw53")
+[sub_resource type="Resource" id="Resource_38un6"]
+script = ExtResource("4_tce5m")
 name = "State"
-metadata/graph_offset = Vector2(485, -26.6)
+metadata/graph_offset = Vector2(312, -34.6)
 
-[sub_resource type="Resource" id="Resource_ufhtl"]
-script = ExtResource("3_3qm1p")
+[sub_resource type="Resource" id="Resource_g1i2m"]
+script = ExtResource("3_jggji")
 states = {
-"Entry": SubResource("Resource_unpqd"),
-"State": SubResource("Resource_r2u7v")
+"Entry": SubResource("Resource_yb4bf"),
+"State": SubResource("Resource_38un6")
 }
 transitions = {}
 name = ""
@@ -29,4 +29,4 @@ script = ExtResource("1_rrnda")
 
 [node name="StateMachinePlayer" type="Node" parent="."]
 script = ExtResource("2_aik8m")
-state_machine = SubResource("Resource_ufhtl")
+state_machine = SubResource("Resource_g1i2m")

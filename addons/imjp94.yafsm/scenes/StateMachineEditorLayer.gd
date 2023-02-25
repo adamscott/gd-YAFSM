@@ -3,8 +3,9 @@ extends "res://addons/imjp94.yafsm/scenes/flowchart/FlowChartLayer.gd"
 
 const Utils: = preload("res://addons/imjp94.yafsm/scripts/Utils.gd")
 const StateNode: = preload("res://addons/imjp94.yafsm/scenes/state_nodes/StateNode.tscn")
-const StateNodeScript: = preload("res://addons/imjp94.yafsm/scenes/state_nodes/StateNode.gd")
+const StateNodeScript: = preload("state_nodes/StateNode.gd")
 const StateDirectory: = preload("../src/StateDirectory.gd")
+const StateMachine: = preload("../src/states/StateMachine.gd")
 
 var editor_accent_color: = Color.WHITE:
 	set = set_editor_accent_color

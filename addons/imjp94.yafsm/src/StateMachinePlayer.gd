@@ -1,6 +1,9 @@
 @tool
 extends "StackPlayer.gd"
 
+const State = preload("states/State.gd")
+const StateMachine = preload("states/StateMachine.gd")
+
 signal transited(from, to) # Transition of state
 signal entered(to) # Entry of state machine(including nested), empty string equals to root
 signal exited(from) # Exit of state machine(including nested, empty string equals to root

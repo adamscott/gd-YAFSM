@@ -47,7 +47,6 @@ func _ready():
 	priority_icon.texture = get_theme_icon("AnimationTrackList", "EditorIcons")
 
 func _exit_tree():
-	print("transition editor exit tree")
 	free_node_from_undo_redo() # Managed by EditorInspector
 
 func _on_header_gui_input(event):

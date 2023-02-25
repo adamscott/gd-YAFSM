@@ -12,6 +12,7 @@ func _can_handle(object):
 	return object is Transition
 
 func _parse_property(object, type, path, hint, hint_text, usage, wide) -> bool:
+	prints("parse_property:", object, type, path, hint, hint_text, usage, wide)
 	match path:
 		"from":
 			return true
