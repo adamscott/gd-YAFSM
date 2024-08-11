@@ -24,18 +24,22 @@ func _init(p_from="", p_to="", p_conditions={}):
 func transit(params={}, local_params={}):
 	var can_transit = _conditions.size() > 0
 	for condition in _conditions.values():
-		var has_param = params.has(condition.name)
-		var has_local_param = local_params.has(condition.name)
-		if has_param or has_local_param:
-			# local_params > params
-			var value = local_params.get(condition.name) if has_local_param else params.get(condition.name)
-			if value == null: # null value is treated as trigger
-				can_transit = can_transit and true
-			else:
-				if "value" in condition:
-					can_transit = can_transit and condition.compare(value)
+		if condition.has_method(&"execute"):
+			var value = condition.execute(params, local_params)
+			can_transit = can_transit and value
 		else:
-			can_transit = false
+			var has_param = params.has(condition.name)
+			var has_local_param = local_params.has(condition.name)
+			if has_param or has_local_param:
+				# local_params > params
+				var value = local_params.get(condition.name) if has_local_param else params.get(condition.name)
+				if value == null: # null value is treated as trigger
+					can_transit = can_transit and true
+				else:
+					if "value" in condition:
+						can_transit = can_transit and condition.compare(value)
+			else:
+				can_transit = false
 	if can_transit or _conditions.size() == 0:
 		return to
 	return null

@@ -8,17 +8,12 @@ script = ExtResource("1")
 
 [node name="Name" type="LineEdit" parent="."]
 layout_mode = 2
-offset_right = 67.0
-offset_bottom = 31.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 text = "Param"
 
 [node name="Remove" type="Button" parent="."]
 layout_mode = 2
-offset_left = 71.0
-offset_right = 97.0
-offset_bottom = 31.0
 size_flags_horizontal = 9
 icon = ExtResource("2")
 flat = true
