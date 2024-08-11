@@ -57,7 +57,7 @@ func transit(current_state, params={}, local_params={}):
 	var from_transitions = end_state_machine.transitions.get(nested_states[nested_states.size()-1])
 	if from_transitions:
 		var from_transitions_array = from_transitions.values()
-		from_transitions_array.sort_custom(func(a, b): Transition.sort(a, b))
+		from_transitions_array.sort_custom(func(a, b): return Transition.sort(a, b))
 		
 		for transition in from_transitions_array:
 			var next_state = transition.transit(params, local_params)
